@@ -4,7 +4,7 @@
 
 Official Helm charts for OpsLevel products. Currently supported:
 
-- [Kubernetes OpsLevel Sync](charts/opslevel-sync/README.md) (opslevel/kubectl-opslevel)
+- [Kubernetes Sync](charts/kubernetes-sync/README.md) (opslevel/kubectl-opslevel)
 
 ## How to use OpsLevel Helm repository
 
