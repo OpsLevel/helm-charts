@@ -11,6 +11,7 @@ Official Helm charts for OpsLevel products. Currently supported:
 You need to add this repository to your Helm repositories:
 
 ```
-helm repo add opslevel https://opslevel.github.com/helm-charts
+helm repo add opslevel https://opslevel.github.io/helm-charts
 helm repo update
+helm search repo opslevel
 ```
