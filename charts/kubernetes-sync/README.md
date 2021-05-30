@@ -14,5 +14,5 @@ helm search repo opslevel
 Then you can perform an install with:
 
 ```
-helm install opslevel/kubernetes-sync --set-file sync.config=./opslevel-k8s.yaml -set apitoken=XXXXX
+helm install opslevel/kubernetes-sync --set-file sync.config=./opslevel-k8s.yaml --set sync.schedule="0 12 * * 1" --set apitoken=XXXXX 
 ```

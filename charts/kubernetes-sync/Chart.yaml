@@ -1,8 +1,8 @@
 apiVersion: v2
 name: opslevel-sync
 type: application
-version: 0.1.0
-appVersion: "0.2.0"
+version: 0.2.0
+appVersion: "0.3.0.beta1"
 description: An agent for syncronizing Kubernetes data with OpsLevel
 keywords:
 - monitoring
