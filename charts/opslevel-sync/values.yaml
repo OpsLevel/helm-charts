@@ -1,0 +1,48 @@
+apitoken: "WsguaBJvd44nT2EwFn1bQQIGq9aK7tNA84FI"
+
+image: public.ecr.aws/e1n4f2i6/kubectl-opslevel:v0.3.0.beta1
+
+sync:
+  schedule: "0 12 * * 1"
+  # You can use helm's `--set-file sync.config=./opslevel-k8s.yaml` to populate this
+  config: |-
+    version: "1.0.0"
+    service:
+      import:
+        - selector: # This limits what data we look at in Kubernetes
+            kind: deployment # supported options ["deployment", "statefulset", "daemonset", "service", "ingress", "job", "cronjob", "configmap", "secret"]
+            namespace:
+              include: # if set only these namespaces will be inspected
+                - ""
+              exclude: # if set these namespaces will be excluded from inspection
+                - "kube-system"
+                - "local-path-storage"
+            labels: {}
+          opslevel: # This is how you map your kubernetes data to opslevel service
+            name: .metadata.name
+            owner: .metadata.namespace
+            aliases: # This are how we identify the services again during reconciliation - please make sure they are very unique
+              - '"k8s:\(.metadata.name)-\(.metadata.namespace)"'
+            tags:
+              assign: # tag with the same key name but with a different value will be updated on the service
+                - '{"imported": "kubectl-opslevel"}'
+                - .spec.template.metadata.labels
+              create: # tag with the same key name but with a different value with be added to the service
+                - '{"environment": .spec.template.metadata.labels.environment}'
+
+
+serviceAccount:
+  name: "opslevel-sync"
+  annotations: {}
+
+
+# File Wide Settings
+nameOverride: ""
+fullnameOverride: ""
+labels: {}
+annotations: {}
+securityContext: {}
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
