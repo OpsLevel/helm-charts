@@ -1,8 +1,8 @@
+<img align="right" src="logo.png" width="175" height="175">
+
 # OpsLevel Helm Charts
 
 [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opslevel)](https://artifacthub.io/packages/search?repo=opslevel) 
-
-<img align="right" src="logo.png" width="350" height="350">
 
 
 Official Helm charts for OpsLevel products. Currently supported:
