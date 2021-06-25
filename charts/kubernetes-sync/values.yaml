@@ -1,23 +1,21 @@
 apitoken: "WsguaBJvd44nT2EwFn1bQQIGq9aK7tNA84FI"
 
-image: public.ecr.aws/e1n4f2i6/kubectl-opslevel:v0.3.1-beta.1
+image: public.ecr.aws/opslevel/kubectl-opslevel:v0.4.0
 
 sync:
   schedule: "0 12 * * 1"
   # You can use helm's `--set-file sync.config=./opslevel-k8s.yaml` to populate this
   config: |-
-    version: "1.0.0"
+    version: "1.1.0"
     service:
       import:
         - selector: # This limits what data we look at in Kubernetes
-            kind: deployment # supported options ["deployment", "statefulset", "daemonset", "service", "ingress", "job", "cronjob", "configmap", "secret"]
-            namespace:
-              include: # if set only these namespaces will be inspected
-                - ""
-              exclude: # if set these namespaces will be excluded from inspection
-                - "kube-system"
-                - "local-path-storage"
-            labels: {}
+            apiVersion: apps/v1 # only supports resources found in 'kubectl api-resources --verbs="get,list"'
+            kind: Deployment
+            excludes: # filters out resources if any expression returns truthy
+              - .metadata.namespace == "kube-system"
+              - .metadata.namespace == "local-path-storage"
+              - .metadata.annotations."opslevel.com/ignore"
           opslevel: # This is how you map your kubernetes data to opslevel service
             name: .metadata.name
             owner: .metadata.namespace
