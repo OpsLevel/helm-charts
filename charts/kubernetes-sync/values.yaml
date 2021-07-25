@@ -1,6 +1,6 @@
 apitoken: "WsguaBJvd44nT2EwFn1bQQIGq9aK7tNA84FI"
 
-image: public.ecr.aws/opslevel/kubectl-opslevel:v0.4.0
+image: public.ecr.aws/opslevel/kubectl-opslevel:v0.4.4
 
 sync:
   schedule: "0 12 * * 1"
