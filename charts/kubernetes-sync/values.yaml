@@ -30,6 +30,7 @@ sync:
 
 
 serviceAccount:
+  create: true
   name: "opslevel-sync"
 
 
