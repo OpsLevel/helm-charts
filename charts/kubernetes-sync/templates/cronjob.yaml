@@ -42,7 +42,7 @@ spec:
             resources:
               {{- toYaml .Values.resources | nindent 14 }}
             securityContext:
-              {{- toYaml .Values.podSecurityContext | nindent 14 }}
+              {{- toYaml .Values.securityContext | nindent 14 }}
             volumeMounts:
             - name: config
               mountPath: /app
