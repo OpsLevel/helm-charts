@@ -9,6 +9,8 @@ image: public.ecr.aws/opslevel/kubectl-opslevel:v0.4.7
 sync:
   schedule: "0 12 * * 1"
   # You can use helm's `--set-file sync.config=./opslevel-k8s.yaml` to populate this
+  args:
+  #- --log-level=DEBUG
   config: |-
     version: "1.1.0"
     service:

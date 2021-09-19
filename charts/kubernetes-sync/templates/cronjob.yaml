@@ -27,6 +27,9 @@ spec:
             args:
               - service
               - import
+              {{- with .Values.sync.args }}
+              {{- toYaml . | nindent 14 }}
+              {{- end }}
               {{- if .Values.apitokenPath }}
               - --api-token-path
               - {{ .Values.apitokenPath }}
