@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: sync
+  name: {{ template "opslevel-sync.fullname" . }}
   labels:
     {{- include "opslevel-sync.labels" . | nindent 4 }}
   {{- with .Values.annotations }}
@@ -16,6 +16,10 @@ spec:
         spec:
           restartPolicy: Never
           serviceAccountName: {{ include "opslevel-sync.serviceAccountName" . }}
+          initContainers:
+            {{- with .Values.additionalInitContainers }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
           containers:
           - name: {{ .Chart.Name }}
             image: {{ .Values.image }}
@@ -23,20 +27,35 @@ spec:
             args:
               - service
               - import
+              {{- with .Values.sync.args }}
+              {{- toYaml . | nindent 14 }}
+              {{- end }}
+              {{- if .Values.apitokenPath }}
+              - --api-token-path
+              - {{ .Values.apitokenPath }}
+              {{- end }}
             envFrom:
+            {{- if and .Values.apitokenSecret.create (not .Values.apitokenPath) }}
             - secretRef:
-                name: api-token
+                name: {{ .Values.apitokenSecret.name }}
+            {{- end }}
             resources:
               {{- toYaml .Values.resources | nindent 14 }}
             securityContext:
-              {{- toYaml .Values.podSecurityContext | nindent 14 }}
+              {{- toYaml .Values.securityContext | nindent 14 }}
             volumeMounts:
             - name: config
               mountPath: /app
+            {{- with .Values.additionalVolumeMounts }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
           volumes:
           - name: config
             configMap:
               name: sync
+          {{- with .Values.additionalVolumes }}
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
           {{- with .Values.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}

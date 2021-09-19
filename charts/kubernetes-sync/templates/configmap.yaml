@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: sync
+  name: {{ template "opslevel-sync.fullname" . }}
   labels:
     {{- include "opslevel-sync.labels" . | nindent 4 }}
   {{- with .Values.annotations }}
@@ -11,3 +11,6 @@ metadata:
 data:
   opslevel-k8s.yaml: |-
     {{ .Values.sync.config | nindent 4 }}
+  {{- with .Values.additionalConfigMapData }}
+    {{- toYaml . | nindent 2 }}
+  {{- end }}

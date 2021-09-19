@@ -1,10 +1,16 @@
-apitoken: "WsguaBJvd44nT2EwFn1bQQIGq9aK7tNA84FI"
+apitoken:
+apitokenPath:
+apitokenSecret:
+  create: true
+  name: api-token
 
-image: public.ecr.aws/opslevel/kubectl-opslevel:v0.4.4
+image: public.ecr.aws/opslevel/kubectl-opslevel:v0.4.7
 
 sync:
   schedule: "0 12 * * 1"
   # You can use helm's `--set-file sync.config=./opslevel-k8s.yaml` to populate this
+  args:
+  #- --log-level=DEBUG
   config: |-
     version: "1.1.0"
     service:
@@ -28,11 +34,14 @@ sync:
               create: # tag with the same key name but with a different value with be added to the service
                 - '{"environment": .spec.template.metadata.labels.environment}'
 
-
 serviceAccount:
   create: true
   name: "opslevel-sync"
 
+additionalConfigMapData:
+additionalInitContainers:
+additionalVolumes:
+additionalVolumeMounts:
 
 # File Wide Settings
 nameOverride: ""
