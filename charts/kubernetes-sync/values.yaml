@@ -1,4 +1,4 @@
-apitoken: "WsguaBJvd44nT2EwFn1bQQIGq9aK7tNA84FI"
+apitoken:
 apitokenPath:
 apitokenSecret:
   create: true
