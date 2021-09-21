@@ -35,9 +35,10 @@ spec:
               - {{ .Values.apitokenPath }}
               {{- end }}
             envFrom:
-            {{- if and .Values.apitokenSecret.create (not .Values.apitokenPath) }}
+            {{- if not .Values.apitokenPath }}
             - secretRef:
                 name: {{ .Values.apitokenSecret.name }}
+                optional: true
             {{- end }}
             resources:
               {{- toYaml .Values.resources | nindent 14 }}
