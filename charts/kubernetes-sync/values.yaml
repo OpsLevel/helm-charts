@@ -1,7 +1,6 @@
 apitoken:
 apitokenPath:
 apitokenSecret:
-  create: true
   name: api-token
 
 image: public.ecr.aws/opslevel/kubectl-opslevel:v0.4.7
