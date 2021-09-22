@@ -53,7 +53,7 @@ spec:
           volumes:
           - name: config
             configMap:
-              name: sync
+              name: {{ template "opslevel-sync.fullname" . }}
           {{- with .Values.additionalVolumes }}
             {{- toYaml . | nindent 10 }}
           {{- end }}
