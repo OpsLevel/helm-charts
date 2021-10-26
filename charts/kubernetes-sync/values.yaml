@@ -1,15 +1,14 @@
 apitoken:
 apitokenPath:
 apitokenSecret:
-  name: api-token
+  name: opslevel-api-token
 
-image: public.ecr.aws/opslevel/kubectl-opslevel:v0.4.7
+image: public.ecr.aws/opslevel/kubectl-opslevel:v0.6.3
 
 sync:
-  schedule: "0 12 * * 1"
   # You can use helm's `--set-file sync.config=./opslevel-k8s.yaml` to populate this
   args:
-  #- --log-level=DEBUG
+  # - --log-level=DEBUG
   config: |-
     version: "1.1.0"
     service:
@@ -23,15 +22,29 @@ sync:
               - .metadata.annotations."opslevel.com/ignore"
           opslevel: # This is how you map your kubernetes data to opslevel service
             name: .metadata.name
-            owner: .metadata.namespace
+            description: .metadata.annotations."opslevel.com/description"
+            owner: .metadata.annotations."opslevel.com/owner"
+            lifecycle: .metadata.annotations."opslevel.com/lifecycle"
+            tier: .metadata.annotations."opslevel.com/tier"
+            product: .metadata.annotations."opslevel.com/product"
+            language: .metadata.annotations."opslevel.com/language"
+            framework: .metadata.annotations."opslevel.com/framework"
             aliases: # This are how we identify the services again during reconciliation - please make sure they are very unique
               - '"k8s:\(.metadata.name)-\(.metadata.namespace)"'
             tags:
               assign: # tag with the same key name but with a different value will be updated on the service
                 - '{"imported": "kubectl-opslevel"}'
-                - .spec.template.metadata.labels
+                - .metadata.labels
+                # find annoations with format: opslevel.com/tags.<key name>: <value>
+                - '.metadata.annotations | to_entries |  map(select(.key | startswith("opslevel.com/tags"))) | map({(.key | split(".")[2]): .value})'
               create: # tag with the same key name but with a different value with be added to the service
-                - '{"environment": .spec.template.metadata.labels.environment}'
+                - '{"environment": .metadata.labels.environment}'
+            tools:
+              # find annotations with format: opslevel.com/tools.<category>.<displayname>: <url> 
+              - '.metadata.annotations | to_entries |  map(select(.key | startswith("opslevel.com/tools"))) | map({"category": .key | split(".")[2], "displayName": .key | split(".")[3], "url": .value})'
+            repositories: # attach repositories to the service using the opslevel repo alias - IE github.com:hashicorp/vault
+              # find annotations with format: opslevel.com/repo.<displayname>.<repo.subpath.dots.turned.to.forwardslash>: <opslevel repo alias> 
+              - '.metadata.annotations | to_entries |  map(select(.key | startswith("opslevel.com/repos"))) | map({"name": .key | split(".")[2], "directory": .key | split(".")[3:] | join("/"), "repo": .value})'
 
 serviceAccount:
   create: true
@@ -49,7 +62,8 @@ labels: {}
 annotations:
   opslevel.com/description: "A tool that enables you to import & reconcile services with OpsLevel from your Kubernetes clusters."
   opslevel.com/language: "go"
-  opslevel.com/tags.app_version: "v0.3.0.beta1"
+  opslevel.com/framework: "client-go"
+  opslevel.com/tags.app_version: "v0.6.3"
 securityContext: {}
 resources: {}
 nodeSelector: {}
