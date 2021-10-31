@@ -2,7 +2,7 @@
 
 # OpsLevel Helm Charts
 
-[![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opslevel)](https://artifacthub.io/packages/search?repo=opslevel) 
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opslevel)](https://artifacthub.io/packages/search?repo=opslevel)
 
 
 Official Helm charts for OpsLevel products. Currently supported:

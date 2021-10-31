@@ -1,1 +1,3 @@
 Happy OpsLeveling!
+
+You can now open https://app.opslevel.com and see your services being created or updated!
