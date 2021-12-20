@@ -3,7 +3,7 @@ apitokenPath:
 apitokenSecret:
   name: opslevel-api-token
 
-image: public.ecr.aws/opslevel/kubectl-opslevel:v0.6.3
+image: public.ecr.aws/opslevel/kubectl-opslevel:v0.6.6
 
 sync:
   # You can use helm's `--set-file sync.config=./opslevel-k8s.yaml` to populate this
