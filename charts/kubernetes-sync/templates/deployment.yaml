@@ -23,7 +23,7 @@ spec:
       serviceAccountName: {{ include "opslevel-sync.serviceAccountName" . }}
       initContainers:
         {{- with .Values.additionalInitContainers }}
-          {{- toYaml . | nindent 12 }}
+          {{- toYaml . | nindent 6 }}
         {{- end }}
       containers:
       - name: {{ .Chart.Name }}
@@ -33,7 +33,7 @@ spec:
           - service
           - reconcile
           {{- with .Values.sync.args }}
-          {{- toYaml . | nindent 14 }}
+          {{- toYaml . | nindent 10 }}
           {{- end }}
           {{- if .Values.apitokenPath }}
           - --api-token-path
@@ -47,34 +47,34 @@ spec:
         {{- end }}
         {{- with .Values.resources }}
         resources:
-          {{- toYaml . | nindent 14 }}
+          {{- toYaml . | nindent 10 }}
         {{- end }}
         {{- with .Values.securityContext }}
         securityContext:
-          {{- toYaml . | nindent 14 }}
+          {{- toYaml . | nindent 10 }}
         {{- end }}
         volumeMounts:
         - name: config
           mountPath: /app
         {{- with .Values.additionalVolumeMounts }}
-          {{- toYaml . | nindent 12 }}
+          {{- toYaml . | nindent 8 }}
         {{- end }}
       volumes:
       - name: config
         configMap:
           name: {{ template "opslevel-sync.fullname" . }}
       {{- with .Values.additionalVolumes }}
-        {{- toYaml . | nindent 10 }}
+        {{- toYaml . | nindent 6 }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 12 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.affinity }}
       affinity:
-        {{- toYaml . | nindent 12 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 12 }}
+        {{- toYaml . | nindent 6 }}
       {{- end }}
