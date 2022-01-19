@@ -1,8 +1,8 @@
 apiVersion: v2
 name: kubernetes-sync
 type: application
-version: 0.5.2
-appVersion: "0.6.6"
+version: 0.5.3
+appVersion: "2022.01.19"
 description: An agent for syncronizing Kubernetes data with OpsLevel
 keywords:
 - monitoring
