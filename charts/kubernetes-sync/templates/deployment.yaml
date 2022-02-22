@@ -12,7 +12,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "opslevel-sync.labels" . | nindent 6 }}
+      {{- include "opslevel-sync.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
