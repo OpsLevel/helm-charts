@@ -2,6 +2,27 @@ apiVersion: v1
 entries:
   kubernetes-sync:
   - apiVersion: v2
+    appVersion: 2022.02.25
+    created: "2022-02-25T20:29:22.813203948Z"
+    description: An agent for syncronizing Kubernetes data with OpsLevel
+    digest: 81fe03b0317633811bbebe0077991f399c9c68652f1f89cccac51d6929474198
+    home: https://www.opslevel.com/
+    icon: https://www.opslevel.com/images/OpsLevelLogoText.svg
+    keywords:
+    - monitoring
+    - alerting
+    - metric
+    maintainers:
+    - email: support@opslevel.com
+      name: OpsLevel
+    name: kubernetes-sync
+    sources:
+    - https://github.com/OpsLevel/kubectl-opslevel
+    type: application
+    urls:
+    - https://github.com/OpsLevel/helm-charts/releases/download/kubernetes-sync-0.5.6/kubernetes-sync-0.5.6.tgz
+    version: 0.5.6
+  - apiVersion: v2
     appVersion: 2022.01.27
     created: "2022-02-22T03:02:30.582070015Z"
     description: An agent for syncronizing Kubernetes data with OpsLevel
@@ -379,4 +400,4 @@ entries:
     urls:
     - https://github.com/OpsLevel/helm-charts/releases/download/kubernetes-sync-0.2.1/kubernetes-sync-0.2.1.tgz
     version: 0.2.1
-generated: "2022-02-22T03:02:30.582292826Z"
+generated: "2022-02-25T20:29:22.813397921Z"
