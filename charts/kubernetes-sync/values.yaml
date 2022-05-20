@@ -6,8 +6,9 @@ apitokenSecret:
 image: public.ecr.aws/opslevel/kubectl-opslevel:v2022.02.25
 
 sync:
-  # You can use helm's `--set-file sync.config=./opslevel-k8s.yaml` to populate this
   args:
+  # IE:
+  # - --resync=12
   # - --log-level=DEBUG
   config: |-
     version: "1.1.0"
