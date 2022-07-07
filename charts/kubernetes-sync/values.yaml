@@ -47,6 +47,10 @@ sync:
               # find annotations with format: opslevel.com/repo.<displayname>.<repo.subpath.dots.turned.to.forwardslash>: <opslevel repo alias> 
               - '.metadata.annotations | to_entries |  map(select(.key | startswith("opslevel.com/repos"))) | map({"name": .key | split(".")[2], "directory": .key | split(".")[3:] | join("/"), "repo": .value})'
 
+collect:
+  enabled: false
+  integration: ""
+
 serviceAccount:
   create: true
   name: "opslevel-sync"
@@ -61,7 +65,6 @@ nameOverride: ""
 fullnameOverride: ""
 labels: {}
 annotations:
-  opslevel.com/description: "A tool that enables you to import & reconcile services with OpsLevel from your Kubernetes clusters."
   opslevel.com/language: "go"
   opslevel.com/framework: "client-go"
   opslevel.com/tags.app_version: "v0.6.3"

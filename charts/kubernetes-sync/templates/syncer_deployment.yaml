@@ -1,26 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "opslevel-sync.fullname" . }}
+  name: opslevel-syncer
   labels:
-    {{- include "opslevel-sync.labels" . | nindent 4 }}
+    {{- include "opslevel.labels" . | nindent 4 }}
   {{- with .Values.annotations }}
   annotations:
+    opslevel.com/description: "A tool that enables you to import & reconcile services with OpsLevel from your Kubernetes clusters."
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "opslevel-sync.selectorLabels" . | nindent 6 }}
+      {{- include "opslevel.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: "syncer"
   template:
     metadata:
       labels:
-        {{- include "opslevel-sync.labels" . | nindent 8 }}
+        {{- include "opslevel.labels" . | nindent 8 }}
+        app.kubernetes.io/component: "syncer"
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
-      serviceAccountName: {{ include "opslevel-sync.serviceAccountName" . }}
+      serviceAccountName: {{ include "opslevel.serviceAccountName" . }}
       initContainers:
         {{- with .Values.additionalInitContainers }}
           {{- toYaml . | nindent 6 }}
@@ -62,7 +65,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: {{ template "opslevel-sync.fullname" . }}
+          name: {{ template "opslevel.fullname" . }}
       {{- with .Values.additionalVolumes }}
         {{- toYaml . | nindent 6 }}
       {{- end }}
