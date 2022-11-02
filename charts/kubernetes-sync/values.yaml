@@ -3,15 +3,14 @@ apitokenPath:
 apitokenSecret:
   name: opslevel-api-token
 
-image: public.ecr.aws/opslevel/kubectl-opslevel:v2022.02.25
+image: public.ecr.aws/opslevel/kubectl-opslevel:v2022.10.19
 
 sync:
   args:
   # IE:
-  # - --resync=12
   # - --log-level=DEBUG
   config: |-
-    version: "1.1.0"
+    version: "1.2.0"
     service:
       import:
         - selector: # This limits what data we look at in Kubernetes
@@ -64,7 +63,7 @@ annotations:
   opslevel.com/description: "A tool that enables you to import & reconcile services with OpsLevel from your Kubernetes clusters."
   opslevel.com/language: "go"
   opslevel.com/framework: "client-go"
-  opslevel.com/tags.app_version: "v0.6.3"
+  opslevel.com/tags.app_version: "v2022.10.19"
 securityContext: {}
 resources: {}
 nodeSelector: {}
