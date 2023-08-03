@@ -10,7 +10,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if has .Values.service.type (list "LoadBalancer" "NodePort") }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
+  {{- end }}
   ports:
     - name: {{ template "utils.name" . }}
       port: 80
