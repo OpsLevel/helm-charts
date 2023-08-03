@@ -8,6 +8,7 @@
 Official Helm charts for OpsLevel products. Currently supported:
 
 - [Kubernetes Sync](https://github.com/OpsLevel/helm-charts/tree/main/charts/kubernetes-sync) (opslevel/kubectl-opslevel)
+- [Gitlab Proxy](https://github.com/OpsLevel/helm-charts/tree/main/charts/gitlab-proxy) (opslevel/gitlab-proxy)
 
 ## How to use OpsLevel Helm repository
 
