@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "utils.name" . }}
+  labels:
+    {{- include "utils.labels" . | nindent 4 }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+  selector:
+    matchLabels:
+      {{- include "utils.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "utils.selectorLabels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+    spec:
+      containers:
+        - name: {{ template "utils.name" . }}
+          image: {{ .Values.image }}
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: {{ template "utils.name" . }}
+          ports:
+            - name: {{ template "utils.name" . }}
+              containerPort: 80
+          volumeMounts:
+            - mountPath: /etc/caddy/
+              name: {{ template "utils.name" . }}
+      volumes:
+        - name: {{ template "utils.name" . }}
+          configMap:
+            name: {{ template "utils.name" . }}

@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "utils.name" . }}
+  labels:
+    {{- include "utils.labels" . | nindent 4 }}
+data:
+  Caddyfile: |
+    (gitlab_proxy) {
+    	reverse_proxy https://gitlab.com {
+    		header_up Authorization "Bearer {$OUTBOUND_TOKEN}"
+    		header_up Host {upstream_hostport}
+    	}
+    }
+
+    (get) {
+    	header_regexp Authorization "Bearer\s{$INBOUND_TOKEN}"
+    	method GET
+    }
+
+    :80 {
+    	@allow_get_auth {
+    		import get
+    		path_regexp "^/oauth/token/info$|^/api/v4/personal_access_tokens$"
+    	}
+
+    	@allow_get_groups {
+    		import get
+    		path_regexp "^/api/v4/groups$|^/api/v4/groups/\w*/projects$"
+    	}
+
+    	@allow_get_projects {
+    		import get
+    		path_regexp "^/api/v4/projects$|^/api/v4/projects/\w*$|^/api/v4/projects/\w*/languages$|^/api/v4/projects/\w*/search$"
+    	}
+
+    	@allow_get_repository {
+    		import get
+    		path_regexp "^/api/v4/projects/\w*/repository/files/*|^/api/v4/projects/\w*/repository/branches/*"
+    	}
+
+    	@allow_get_hooks {
+    		import get
+    		path /api/v4/projects/*/hooks/*
+    	}
+
+    	@allow_post_hooks {
+    		header_regexp Authorization "Bearer\s{$INBOUND_TOKEN}"
+    		method POST
+    		path /api/v4/projects/*/hooks
+    	}
+
+    	@allow_delete_hooks {
+    		header_regexp Authorization "Bearer\s{$INBOUND_TOKEN}"
+    		method DELETE
+    		path /api/v4/projects/*/hooks/*
+    	}
+
+    	handle @allow_get_auth {
+    		import gitlab_proxy
+    	}
+
+    	handle @allow_get_groups {
+    		import gitlab_proxy
+    	}
+
+    	handle @allow_get_projects {
+    		import gitlab_proxy
+    	}
+
+    	handle @allow_get_repository {
+    		import gitlab_proxy
+    	}
+
+    	handle @allow_get_hooks {
+    		import gitlab_proxy
+    	}
+
+    	handle @allow_post_hooks {
+    		import gitlab_proxy
+    	}
+
+    	handle @allow_delete_hooks {
+    		import gitlab_proxy
+    	}
+
+    	respond 403
+    }

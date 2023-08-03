@@ -1,0 +1,11 @@
+apiVersion: v2
+name: gitlab-proxy
+type: application
+version: 0.0.1
+appVersion: "2.6"
+description: A proxy configured for Gitlab.com requests from Opslevel so you do not have to give OpsLevel your real Gitlab.com credentials
+home: https://www.opslevel.com/
+icon: https://www.opslevel.com/images/OpsLevelLogoText.svg
+maintainers:
+  - name: OpsLevel
+    email: support@opslevel.com

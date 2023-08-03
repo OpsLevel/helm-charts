@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "utils.name" . }}
+  labels:
+    {{- include "utils.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
+  ports:
+    - name: {{ template "utils.name" . }}
+      port: 80
+      targetPort: 80
+  selector:
+    {{- include "utils.selectorLabels" . | nindent 4 }}

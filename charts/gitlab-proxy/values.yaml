@@ -1,0 +1,22 @@
+image: "caddy:2.6"
+real_token: ""
+dummy_token: ""
+selectorLabels: {}
+service:
+    annotations: {}
+    type: ClusterIP
+    externalTrafficPolicy: Cluster
+ingress:
+    enabled: false
+    annotations: {}
+    ingressClassName: "nginx"
+    tls: false
+    domain: "gitlab-proxy.company-name.com"
+
+# File Wide Settings
+name: "gitlab-proxy"
+labels: {}
+annotations:
+  opslevel.com/description: "A proxy configured for Gitlab.com requests from Opslevel so you do not have to give OpsLevel your real Gitlab.com credentials"
+  opslevel.com/language: "go"
+  opslevel.com/framework: "helm"
