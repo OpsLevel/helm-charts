@@ -1,7 +1,7 @@
 apiVersion: v2
 name: kubernetes-sync
 type: application
-version: 0.5.9
+version: 0.5.10
 appVersion: "2022.10.19"
 description: An agent for syncronizing Kubernetes data with OpsLevel
 keywords:
@@ -9,7 +9,7 @@ keywords:
 - alerting
 - metric
 home: https://www.opslevel.com/
-icon: https://www.opslevel.com/images/OpsLevelLogoText.svg
+icon: https://app.opslevel.com/OpsLevelLogo-Primary.svg
 sources:
 - https://github.com/OpsLevel/kubectl-opslevel
 maintainers:
