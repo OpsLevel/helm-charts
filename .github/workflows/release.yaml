@@ -1,32 +1,78 @@
 name: Release Charts
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'charts/**'
+workflow_dispatch: {}
+repository_dispatch:
+  types:
+    - release
+
+permissions:
+  contents: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - 
+        name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-      - name: Configure Git
+      - 
+        name: Fetch All Tags
+        run: git fetch --force --tags
+      - 
+        name: Determine Next Version
+        id: next_version
+        uses: zwaldowski/semver-release-action@v3
+        with:
+          dry_run: true
+          bump: "patch"
+          prefix: "v"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - 
+        name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+      - 
+        name: Ensure Changelog
         run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
-      - name: Install Helm
+          if test -f ./.changes/${{ steps.next_version.outputs.version_tag }}.md
+          then
+            echo "Skip Changie..."
+          else
+            go install github.com/miniscruff/changie@latest
+            changie batch ${{ steps.next_version.outputs.version_tag }}
+            changie merge
+          fi
+      - 
+        name: Commit & Tag Release
+        run: |
+          git config user.name "OpsLevel Bots"
+          git config user.email "bots@opslevel.com"
+          if [[ $(git diff --stat) != '' ]];
+          then
+            git add .
+            git commit -m "Cut Release '${{ steps.next_version.outputs.version_tag }}'"
+            git push origin HEAD
+          else
+            echo "Skip commit"
+          fi
+          git tag -f ${{ steps.next_version.outputs.version_tag }} -m "Cut Release '${{ steps.next_version.outputs.version_tag }}'"
+          git push -f origin refs/tags/${{ steps.next_version.outputs.version_tag }}
+      - 
+        name: Ensure Release Does Not Exist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete ${{ steps.next_version.outputs.version_tag }} || true
+      - 
+        name: Install Helm
         uses: azure/setup-helm@v1
         with:
           version: v3.4.0
-
-      - name: Run chart-releaser
+      - 
+        name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.2.1
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
