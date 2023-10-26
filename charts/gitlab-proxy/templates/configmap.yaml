@@ -7,7 +7,7 @@ metadata:
 data:
   Caddyfile: |
     (gitlab_proxy) {
-    	reverse_proxy https://gitlab.com {
+    	reverse_proxy {{ .Values.gitlab_domain }} {
     		header_up Authorization "Bearer {$OUTBOUND_TOKEN}"
     		header_up Host {upstream_hostport}
     	}
