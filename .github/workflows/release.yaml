@@ -1,9 +1,10 @@
 name: Release Charts
 
-workflow_dispatch: {}
-repository_dispatch:
-  types:
-    - release
+on:
+  workflow_dispatch: {}
+  repository_dispatch:
+    types:
+      - release
 
 permissions:
   contents: write
