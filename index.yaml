@@ -3,6 +3,22 @@ entries:
   gitlab-proxy:
   - apiVersion: v2
     appVersion: "2.6"
+    created: "2023-10-30T18:35:42.83255746Z"
+    description: A proxy configured for Gitlab requests from Opslevel so you do not
+      have to give OpsLevel your real Gitlab credentials
+    digest: 0557a5fc7d0484ead247fd141f5e653143f7209c07c58f3567b75b00efa812a6
+    home: https://www.opslevel.com/
+    icon: https://app.opslevel.com/OpsLevelLogo-Primary.svg
+    maintainers:
+    - email: support@opslevel.com
+      name: OpsLevel
+    name: gitlab-proxy
+    type: application
+    urls:
+    - https://github.com/OpsLevel/helm-charts/releases/download/gitlab-proxy-0.0.6/gitlab-proxy-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v2
+    appVersion: "2.6"
     created: "2023-08-23T14:25:01.933652601Z"
     description: A proxy configured for Gitlab.com requests from Opslevel so you do
       not have to give OpsLevel your real Gitlab.com credentials
@@ -512,4 +528,4 @@ entries:
     urls:
     - https://github.com/OpsLevel/helm-charts/releases/download/kubernetes-sync-0.2.1/kubernetes-sync-0.2.1.tgz
     version: 0.2.1
-generated: "2023-08-23T14:25:01.933838724Z"
+generated: "2023-10-30T18:35:42.832633461Z"
