@@ -10,7 +10,7 @@ sync:
   # IE:
   # - --log-level=DEBUG
   config: |-
-    version: 1.3.0
+    version: "1.3.0"
     service:
       import:
         - selector:
