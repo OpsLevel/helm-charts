@@ -32,6 +32,8 @@ spec:
         args:
           - service
           - reconcile
+          - --config
+          - /app/opslevel-k8s.yaml
           {{- with .Values.sync.args }}
           {{- toYaml . | nindent 10 }}
           {{- end }}
