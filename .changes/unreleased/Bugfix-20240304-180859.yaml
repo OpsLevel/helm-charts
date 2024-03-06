@@ -1,0 +1,3 @@
+kind: Bugfix
+body: Fix bug where the chart's appVersion was was written as '2024.3.4' and not 'v2024.3.4'
+time: 2024-03-04T18:08:59.637806-05:00
