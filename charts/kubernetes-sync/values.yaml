@@ -3,7 +3,7 @@ apitokenPath:
 apitokenSecret:
   name: opslevel-api-token
 
-image: public.ecr.aws/opslevel/kubectl-opslevel:v2024.3.4
+image: public.ecr.aws/opslevel/kubectl-opslevel:v2024.3.18
 
 sync:
   args:
@@ -66,7 +66,7 @@ annotations:
   opslevel.com/description: "A tool that enables you to import & reconcile services with OpsLevel from your Kubernetes clusters."
   opslevel.com/language: "go"
   opslevel.com/framework: "client-go"
-  opslevel.com/tags.app_version: "v2024.3.4"
+  opslevel.com/tags.app_version: "v2024.3.18"
 securityContext: {}
 resources: {}
 nodeSelector: {}
