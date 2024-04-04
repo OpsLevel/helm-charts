@@ -44,7 +44,7 @@ helm upgrade sync opslevel/kubernetes-sync \
 To deploying using an image from your own registry, edit this line in [values.yaml](./values.yaml):
 
 ```
-image: public.ecr.aws/opslevel/kubectl-opslevel:v2024.3.18
+image: public.ecr.aws/opslevel/kubectl-opslevel:v2024.4.3
 ```
 
 and then deploy using `helm`.
