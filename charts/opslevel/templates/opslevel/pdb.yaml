@@ -1,0 +1,13 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: opslevel-web
+  labels:
+    app.kubernetes.io/component: pdb
+    app.kubernetes.io/part-of: opslevel
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: web
+      app.kubernetes.io/part-of: opslevel

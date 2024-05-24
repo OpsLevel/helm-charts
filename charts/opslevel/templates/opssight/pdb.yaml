@@ -1,0 +1,15 @@
+{{- if .Values.opssight.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: opssight-web
+  labels:
+    app.kubernetes.io/component: pdb
+    app.kubernetes.io/part-of: opssight
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: web
+      app.kubernetes.io/part-of: opssight
+{{- end }}

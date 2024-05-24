@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opslevel
+  labels:
+    app.kubernetes.io/component: config
+    app.kubernetes.io/part-of: opslevel
+data:
+  # Please Keep Alphabetized
+  ACTIVE_STORAGE_SERVICE_TYPE: '{{ .Values.objectStorage.type }}'
+  ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_BUCKET: '{{ .Values.objectStorage.secret.bucket_name }}'
+  ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_REGION: '{{ .Values.objectStorage.secret.region }}'
+  {{- if eq .Values.objectStorage.type "minio" }}
+  ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_ENDPOINT: 'http://storage.{{ .Release.Namespace }}.svc.cluster.local:9000/'
+  {{- else }}
+  ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_ENDPOINT: ''
+  {{- end }}
+  ADMIN_DASHBOARD_ENABLED: 'false'
+  BEAMER_ENABLED: 'false'
+  BENTO_ENABLED: 'false'
+  CACHE_EXPIRY: '240'
+  CIRCUIT_BREAKER_ENABLED: 'true'
+  CRONTAB: 'crontab.prod'
+  DATABASE_SSL_CERT_PATH: ''
+  DD_INSTRUMENTATION_ENABLED: 'false'
+  DEV_ACCOUNT_NAME: 'Main'
+  DEV_NAME: 'Alice Wonderland'
+  DEV_EMAIL: 'alice@opslevel.com'
+  DEV_PASSWORD: "wonderland"
+  FORCE_SSL: 'false'
+  LANG: 'en_US.UTF-8'
+  LOG_TRACING_METADATA: 'false'
+  MAIL_DOMAIN: '{{ default .Values.opslevel.domain .Values.smtp.secret.emailDomain }}'
+  MAIL_SENDER_NAME: '{{ default "" .Values.smtp.secret.emailDisplayName }}'
+  MAIL_USERNAME: '{{ default "" .Values.smtp.secret.emailUsername }}'
+  OPSGENIE_ENABLED: 'true'
+  OPSLEVEL_ENV: '{{ default "on-prem" .Values.global.replicated.licenseFields.opslevel_env.value }}'
+  OPSLEVEL_DOMAIN: '{{ default "example.com" .Values.opslevel.domain }}'
+  OPSLEVEL_SUBDOMAIN: '{{ default "app" .Values.opslevel.subdomain }}'
+  OPSSIGHT_BASE_URL: 'http://opssight:80/'
+  PROXY_PROTOCOL: 'https'
+  RACK_TIMEOUT_SERVICE_TIMEOUT: '35'
+  RACK_TIMEOUT_WAIT_TIMEOUT: '35'
+  RAILS_LOG_TO_STDOUT: 'enabled'
+  RAILS_SERVE_STATIC_FILES: 'enabled'
+  REPLICATED_SDK_URL: 'http://replicated:3000'
+  SIDEKIQ_CONCURRENCY: '3'
+  SIDEKIQ_SCHEDULER: 'true'
+  SMTP_HOST: '{{ .Values.smtp.secret.host }}'
+  SMTP_PORT: '{{ .Values.smtp.secret.port }}'
+  SMTP_USERNAME: '{{ .Values.smtp.secret.username }}'
+  THROTTLE_GRAPHQL_LIMIT: '250'
+  THROTTLER_ENABLED: 'true'
+  TRANSACTIONAL_OUTBOX_ENABLED: '{{ .Values.opssight.enabled }}'

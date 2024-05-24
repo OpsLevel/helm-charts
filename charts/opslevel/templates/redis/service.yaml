@@ -1,0 +1,17 @@
+{{- if eq .Values.redis.external false }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: redis
+spec:
+  publishNotReadyAddresses: true
+  ports:
+  - port: 6379
+    targetPort: 6379
+  selector:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/part-of: redis
+  {{- end }}

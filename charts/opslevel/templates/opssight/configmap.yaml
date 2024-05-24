@@ -1,0 +1,21 @@
+{{- if .Values.opssight.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: '{{ .Values.opssight.secret.name }}'
+  labels:
+    app.kubernetes.io/component: config
+    app.kubernetes.io/part-of: opssight
+data:
+  # Please Keep Alphabetized
+  DB_HOST: "{{ .Values.postgres.secret.host }}"
+  DB_PORT: "{{ .Values.postgres.secret.port }}"
+  DB_SCHEMA: "{{ .Values.postgres.secret.databaseName }}"
+  DB_USER: "{{ .Values.postgres.secret.username }}"
+  DD_TRACE_ENABLED: "false"
+  ENVIRONMENT: "production"
+  IS_DEPLOYED: "true"
+  RAILS_ENV: "production"
+  RAILS_LOG_TO_STDOUT: "enabled"
+  REDIS_URL: "{{ template "opssight.redisURL" .}}"
+{{- end }}

@@ -1,0 +1,25 @@
+{{- if eq .Values.mysql.external false }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql
+  labels:
+    app.kubernetes.io/component: config
+    app.kubernetes.io/part-of: mysql
+data:
+  my.cnf: |-
+    [mysqld]
+    server-id = 1
+    sync_binlog = 1
+    innodb_flush_log_at_trx_commit = 1
+    innodb_file_per_table = 1
+    init_connect='SET collation_connection = utf8mb4_unicode_ci,NAMES utf8mb4'
+    innodb_strict_mode = 1
+    character_set_server = 'utf8mb4'
+    collation_server = 'utf8mb4_unicode_ci'
+    disable_log_bin
+
+    [client]
+    default_character_set = 'utf8mb4'
+
+{{- end }}

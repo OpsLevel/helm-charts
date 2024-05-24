@@ -1,0 +1,41 @@
+{{- if eq .Values.objectStorage.type "minio" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-create-bucket
+  labels:
+    app.kubernetes.io/component: create-bucket
+    app.kubernetes.io/part-of: minio
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: create-bucket
+      app.kubernetes.io/part-of: minio
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: create-bucket
+        app.kubernetes.io/part-of: minio
+    spec:
+      containers:
+      - name: minio-mc
+        image: 'minio/mc:RELEASE.2023-02-28T00-12-59Z'
+        imagePullPolicy: IfNotPresent
+        command: 
+          - "/opslevel/make-bucket.sh"
+        envFrom:
+        - secretRef:
+            name: minio
+        volumeMounts:
+          - name: scripts
+            mountPath: /opslevel
+      volumes:
+        - name: scripts
+          configMap:
+            name: minio
+            defaultMode: 0777
+{{- end }}

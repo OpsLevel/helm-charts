@@ -1,0 +1,17 @@
+{{- if eq .Values.mysql.external false }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: mysql
+spec:
+  #publishNotReadyAddresses: true
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/part-of: mysql
+{{- end }}

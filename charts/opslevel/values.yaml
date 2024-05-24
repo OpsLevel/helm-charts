@@ -1,0 +1,236 @@
+global:
+  certificate: ""
+  nodeSelector: ""
+  proxy: "proxy.replicated.com/proxy/opslevel"
+  replicated:
+    dockerconfigjson: ""
+    licenseFields:
+      opslevel_env:
+        value: "on-prem"
+  resources:
+    small: &resourcesSmall
+      requests:
+        cpu: '200m'
+        memory: '500Mi'
+      limits:
+        cpu: '1'
+        memory: '2Gi'
+    medium: &resourcesMedium
+      requests:
+        cpu: '1'
+        memory: '2Gi'
+      limits:
+        cpu: '2'
+        memory: '4Gi'
+    large: &resourcesLarge
+      requests:
+        cpu: '2'
+        memory: '2Gi'
+      limits:
+        cpu: '4'
+        memory: '8Gi'
+
+opslevel:
+  domain: "example.com"
+  subdomain: "self-hosted"
+  image:
+    repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
+    tag: "main-e929f7cc"
+  web:
+    replicas: 3
+    resources: *resourcesMedium
+  workerHigh:
+    replicas: 2
+    resources: *resourcesSmall
+  workerLow:
+    replicas: 2
+    resources: *resourcesMedium
+  secret:
+    name: "opslevel"
+    create: true
+    devisePepper: 'onn73il4u0pf4viuovycfb2tu98ld4ji'
+    deviseSecretKey: '2v2j0oiipvdlivkbkqhdxba99afghdt9'
+    encryptionSalt: '0p9jjrgxg6uk8djvsvjyn0bd4jd8gjov'
+    externalUUIDPepper: 'j08rlk9g4kgirwzpa1iu0qjewc89xafx'
+    secretKeyBase: 'n4ugfd4s2my7beak6mhfc2wptjxtefy2'
+    throttlerPepper: 'of7ii1mlx65l8f75kytizj24r6jp2rmz'
+
+runner:
+  enabled: false
+  image:
+    repository: "public.ecr.aws/opslevel/opslevel-runner"
+    tag: "v2023.5.16"
+  replicas: 3
+  resources: *resourcesLarge
+  secret:
+    name: "opslevel-runner"
+    create: true
+    token: ""
+
+opssight:
+  enabled: true
+  image:
+    repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opssight"
+    tag: "production-1d2b22c-1709228604"
+  web:
+    replicas: 2
+    resources: *resourcesMedium
+  worker:
+    replicas: 1
+    resources: *resourcesSmall
+  secret:
+    name: "opssight"
+    create: true
+    secretKeyBase: '5x6bcne8x7ufmqxilmow45a1utm5rz88'
+
+mysql:
+  external: false
+  image:
+    repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/mysql"
+    tag: "8.0.34-debian"
+  resources: *resourcesMedium
+  storageClass: ""
+  storageSize: "10Gi"
+  secret:
+    create: true
+    name: "opslevel-mysql"
+    host: "mysql"
+    port: "3306"
+    databaseName: "opslevel_production"
+    username: "root" # this has to be 'root' if using the built-in mysql
+    password: "admin1234"
+
+postgres:
+  external: false
+  image:
+    repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/postgres"
+    tag: "16.1-bookworm"
+  resources: *resourcesMedium
+  storageClass: ""
+  storageSize: "10Gi"
+  secret:
+    create: true
+    name: "opslevel-postgres"
+    host: "postgres"
+    port: "5432"
+    databaseName: "opssight"
+    username: "admin"
+    password: "admin1234"
+
+redis:
+  external: false
+  image:
+    repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/redis"
+    tag: "6.2.6"
+  resources: *resourcesMedium
+  secret:
+    create: true
+    name: "opslevel-redis"
+    host: "redis"
+    port: "6379"
+    tls: false
+    username: ""
+    password: ""
+
+elasticsearch:
+  external: false
+  image:
+    repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/elasticsearch"
+    tag: "8.8.2"
+  resources: *resourcesLarge
+  storageClass: ""
+  storageSize: "8Gi"
+  secret:
+    create: true
+    name: "opslevel-elasticsearch"
+    host: "elasticsearch"
+    port: "9200"
+    username: "elastic"
+    password: "admin1234"
+    protocol: "http" # one of: "http", "https"
+
+objectStorage:
+  type: "minio" # one of: "minio", "s3"
+  image:
+    repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/minio"
+    tag: "RELEASE.2022-08-22T23-53-06Z"
+  resources: *resourcesMedium
+  storageClass: ""
+  storageSize: "8Gi"
+  secret:
+    create: true
+    name: "opslevel-object-storage"
+    bucketName: "opslevel-storage"
+    accessKey: "admin"
+    secretKey: "admin1234"
+    region: "us-east-1"
+
+smtp:
+  enabled: false
+  secret:
+    create: false
+    name: "opslevel-smtp"
+    emailDisplayName: "opslevel"
+    emailDomain: ""
+    emailUsername: "info"
+    host: ""
+    password: ""
+    port: ""
+    username: ""
+
+integrations:
+  azureDevOps: # Docs:
+    enabled: false
+    secret:
+      create: true
+      name: "opslevel-azure-devops"
+      appId: ""
+      clientSecret: ""
+  bitbucket: # Docs:
+    enabled: false
+    secret:
+      create: true
+      name: "opslevel-bitbucket"
+      webhookSecret: ""
+  github: # Docs:
+    enabled: false
+    secret:
+      create: true
+      name: "opslevel-github"
+      appName: ""
+      appId: ""
+      privateKey: ""
+      webhookSecret: ""
+  gitlab: # Docs:
+    enabled: false
+    secret:
+      create: true
+      name: "opslevel-gitlab"
+      appId: ""
+      appSecret: ""
+  jira: # Docs:
+    enabled: false
+    secret:
+      create: true
+      name: "opslevel-jira"
+      appClientId: ""
+      appSecret: ""
+  pagerduty: # Docs:
+    enabled: false
+    secret:
+      create: true
+      name: "opslevel-pagerduty"
+      usAppClientId: ""
+      usAppClientSecret: ""
+  slack: # Docs:
+    enabled: false
+    secret:
+      create: true
+      name: "opslevel-slack"
+      clientId: ""
+      clientSecret: ""
+      signingSecret: ""
+      verificationToken: ""
+
+
+

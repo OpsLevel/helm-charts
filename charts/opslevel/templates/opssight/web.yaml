@@ -1,0 +1,65 @@
+{{- if .Values.opssight.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opssight-web
+  labels:
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: opssight
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: web
+      app.kubernetes.io/part-of: opssight
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: web
+        app.kubernetes.io/part-of: opssight
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/opssight/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/opssight/secret.yaml") . | sha256sum }}
+    spec:
+      {{- template "opslevel.pullSecrets" . }}
+      {{- template "global.nodeSelector" . }}
+      priorityClassName: opslevel-normal
+      containers:
+        - name: opssight-web
+          image: "{{ template "opssight.image" . }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          envFrom:
+            - configMapRef:
+                name: '{{ .Values.opssight.secret.name }}'
+            - secretRef:
+                name: '{{ .Values.opssight.secret.name }}'
+          ports:
+            - name: http
+              containerPort: 3000
+          {{- with .Values.opssight.web.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /api/lifecheck
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 2
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 20
+{{- end }}

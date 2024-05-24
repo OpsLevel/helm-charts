@@ -1,0 +1,65 @@
+{{- if eq .Values.postgres.external false }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  labels:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/part-of: postgres
+spec:
+  serviceName: postgres
+  replicas: 1
+  revisionHistoryLimit: 3
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/part-of: postgres
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: app
+        app.kubernetes.io/part-of: postgres
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/postgres/secret.yaml") . | sha256sum }}
+    spec:
+      {{- template "opslevel.pullSecrets" . }}
+      {{- template "global.nodeSelector" . }}
+      priorityClassName: opslevel-high
+      securityContext:
+        fsGroup: 1001
+      hostNetwork: false
+      hostIPC: false
+      containers:
+        - name: postgres
+          image: {{ template "postgres.image" . }}
+          env:
+            - name: "PGDATA"
+              value: "/var/lib/postgresql/data/pgdata"
+          envFrom: &envFrom
+            - secretRef:
+                name: '{{ .Values.postgres.secret.name }}'
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          ports:
+            - name: postgres
+              containerPort: 5432
+          {{- with .Values.postgres.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        {{- if .Values.postgres.storageClass }}
+        storageClassName: '{{ .Values.postgres.storageClass }}'
+        {{- end }}
+        resources:
+          requests:
+            storage: '{{ .Values.postgres.storageSize }}'
+{{- end }}

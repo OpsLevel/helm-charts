@@ -1,0 +1,15 @@
+{{- if eq .Values.objectStorage.type "minio" }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: minio
+  labels:
+    app.kubernetes.io/component: pdb
+    app.kubernetes.io/part-of: minio
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/part-of: minio
+{{- end }}
