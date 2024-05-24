@@ -1,0 +1,46 @@
+name: Release Self-Hosted
+
+workflow_dispatch: {}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      -
+        name: Fetch All Tags
+        run: git fetch --force --tags
+      -
+        name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Get version
+        id: bump
+        run: |
+          echo version=$(cat ./charts/opslevel/Chart.yaml | yq '.version') >> $GITHUB_OUTPUT
+      -
+        name: Prepare Manifests
+        run: task prepare-self-hosted
+      -
+        name: Lint Manifests
+        uses: replicatedhq/action-kots-lint@v0.2.0
+        with:
+          replicated-api-token: ${{ secrets.REPLICATED_API_TOKEN }}
+          replicated-app: 'opslevel-helm'
+          yaml-dir: manifests
+      -
+        name: Create Release
+        uses: replicatedhq/action-kots-release@v0.6.0
+        with:
+          replicated-api-token: ${{ secrets.REPLICATED_API_TOKEN }}
+          replicated-app: 'opslevel-helm'
+          promote-channel: 'Internal'
+          yaml-dir: manfests
+          version: ${{ steps.bump.outputs.version }}

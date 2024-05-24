@@ -1,11 +1,15 @@
 apiVersion: "v2"
 name: "opslevel"
 type: "application"
-version: "2024.5.20"
-appVersion: "2024.5.20"
+version: "2024.5.24"
+appVersion: "2024.3.21"
 description: "The OpsLevel internal developer portal helps your team ship fast without risking your software standards."
 home: "https://www.opslevel.com/"
 icon: "https://app.opslevel.com/OpsLevelLogo-Primary.svg"
 maintainers:
   - name: "OpsLevel"
     email: "support@opslevel.com"
+dependencies:
+  - name: 'replicated'
+    repository: 'oci://registry.replicated.com/library'
+    version: '1.0.0-beta.17'
