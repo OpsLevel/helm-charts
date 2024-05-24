@@ -1,0 +1,66 @@
+{{- if eq .Values.objectStorage.type "minio" }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: minio
+  labels:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/part-of: minio
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/part-of: minio
+  serviceName: minio
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: app
+        app.kubernetes.io/part-of: minio
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/elasticsearch/secret.yaml") . | sha256sum }}
+    spec:
+      {{- template "opslevel.pullSecrets" . }}
+      {{- template "global.nodeSelector" . }}
+      priorityClassName: opslevel-high
+      serviceAccountName: "minio"
+      subdomain: minio
+      containers:
+        - name: minio
+          envFrom:
+          - secretRef:
+              name: minio
+          image: {{ template "objectStorage.image" . }}
+          imagePullPolicy: IfNotPresent
+          args:
+          - server
+          - http://minio-{0...3}.minio.{{ .Release.Namespace }}.svc.cluster.local:9000/data
+          - --json
+          - --address=:9000
+          - --console-address=:9001
+          ports:
+            - name: http
+              containerPort: 9000
+            - name: http-console
+              containerPort: 9001
+          {{- with .Values.objectStorage.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          - name: data
+            mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      {{- if .Values.objectStorage.storageClass }}
+      storageClassName: '{{ .Values.objectStorage.storageClass }}'
+      {{- end }}
+      resources:
+        requests:
+          storage: '{{ .Values.objectStorage.storageSize }}'
+{{- end }}

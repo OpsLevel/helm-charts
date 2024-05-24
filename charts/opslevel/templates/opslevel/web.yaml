@@ -1,0 +1,139 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opslevel-web
+  labels:
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: opslevel
+spec:
+  replicas: {{ .Values.opslevel.web.replicas }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 0%
+  selector:
+    matchLabels:
+      app.kuberntes.io/component: web
+      app.kubernetes.io/part-of: opslevel
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        app.kuberntes.io/component: web
+        app.kubernetes.io/part-of: opslevel
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/opslevel/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/opslevel/secret.yaml") . | sha256sum }}
+    spec:
+      {{- template "opslevel.pullSecrets" . }}
+      {{- template "global.nodeSelector" . }}
+      priorityClassName: opslevel-normal
+      terminationGracePeriodSeconds: 120
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kuberntes.io/component: web
+              app.kubernetes.io/part-of: opslevel
+      initContainers:
+        {{- if .Values.global.certificate }}
+        - name: init-certs
+          image: ruby:3.2.2
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - sleep 10; update-ca-certificates; cp -r /etc/ssl/certs/. /data;
+          volumeMounts:
+            - name: certificate
+              mountPath: /usr/local/share/ca-certificates/custom-cert.crt
+              subPath: custom-cert.crt
+              readOnly: false
+            - name: ca
+              mountPath: /data
+              readOnly: false
+        {{- end }}
+        - name: migrations
+          image: "{{ template "opslevel.image" . }}"
+          imagePullPolicy: IfNotPresent
+          args:
+            - bundle
+            - exec
+            - rake
+            - db:abort_if_pending_migrations
+          envFrom: &envFrom
+            - configMapRef:
+                name: 'opslevel'
+            - secretRef:
+                name: 'opslevel'
+            - secretRef:
+                name: '{{ .Values.redis.secret.name }}'
+            {{- template "opslevel.integration.secrets" . }}
+          {{- if .Values.global.certificate }}
+          volumeMounts:
+            - name: certificate
+              mountPath: /usr/local/share/ca-certificates/custom-cert.crt
+              subPath: custom-cert.crt
+              readOnly: false
+            - name: ca
+              mountPath: /etc/ssl/certs
+          {{- end }}
+      containers:
+        - name: web
+          image: "{{ template "opslevel.image" . }}"
+          imagePullPolicy: IfNotPresent
+          args:
+            - bundle
+            - exec
+            - puma
+            - -C ./config/puma.rb
+          envFrom: *envFrom
+          ports:
+            - name: http
+              containerPort: 3000
+          {{- with .Values.opslevel.web.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+              httpHeaders:
+                - name: Host
+                  value: '{{ .Values.opslevel.subdomain }}.{{ .Values.opslevel.domain }}'
+            periodSeconds: 10
+            successThreshold: 2
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 20
+            successThreshold: 1
+            failureThreshold: 5
+          lifecycle: # https://github.com/puma/puma/issues/2343
+            preStop:
+              exec:
+                command:
+                  - sleep
+                  - '30'
+          {{- if .Values.global.certificate }}
+          volumeMounts:
+            - name: certificate
+              mountPath: /usr/local/share/ca-certificates/custom-cert.crt
+              subPath: custom-cert.crt
+              readOnly: false
+            - name: ca
+              mountPath: /etc/ssl/certs
+          {{- end }}
+      {{- if .Values.global.certificate }}
+      volumes:
+        - name: ca
+          emptyDir: {}
+        - name: certificate
+          secret:
+            secretName: opslevel-certificate
+      {{- end }}

@@ -1,0 +1,37 @@
+{{- if eq .Values.redis.external false }}
+apiVersion: apps/v1  # API version
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/part-of: redis
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/part-of: redis
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: app
+        app.kubernetes.io/part-of: redis
+    spec:
+      {{- template "opslevel.pullSecrets" . }}
+      {{- template "global.nodeSelector" . }}
+      priorityClassName: opslevel-normal
+      containers:
+        - name: master
+          image: {{ template "redis.image" . }}
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 6379
+          {{- with .Values.redis.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+{{- end }}
