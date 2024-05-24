@@ -1,0 +1,27 @@
+# https://taskfile.dev
+version: '3'
+
+vars:
+  VERSION_DYNAMIC:
+    sh: cat ./charts/opslevel/Chart.yaml | yq '.version'
+
+tasks:
+  prepare-self-hosted:
+    desc: Workflow to run in CI to prepare self-hosted release
+    deps:
+      - install-helm
+    cmds:
+      - helm package ./charts/opslevel --dependency-update
+      - mkdir -p ./manifests
+      - mv ./opslevel-{{.VERSION_DYNAMIC}}.tgz ./manifests/opslevel-{{.VERSION_DYNAMIC}}.tgz
+
+  install-helm:
+    internal: true
+    platforms: [darwin]
+    preconditions:
+      - sh: 'which brew'
+        msg: '"brew" needed to install "helm"- see https://brew.sh'
+    status:
+      - test -n "command -v helm"
+    cmds: ["which helm > /dev/null || brew install helm"]
+
