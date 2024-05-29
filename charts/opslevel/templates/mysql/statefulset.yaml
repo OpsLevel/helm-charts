@@ -27,6 +27,7 @@ spec:
     spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
+      serviceAccountName: "{{ .Values.mysql.serviceAccount.name }}"
       priorityClassName: opslevel-critical
       containers:
         - name: mysql

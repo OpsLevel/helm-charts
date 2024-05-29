@@ -27,6 +27,7 @@ spec:
     spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
+      serviceAccountName: "{{ .Values.postgres.serviceAccount.name }}"
       priorityClassName: opslevel-high
       securityContext:
         fsGroup: 1001

@@ -89,6 +89,9 @@ mysql:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/mysql"
     tag: "8.0.34-debian"
   resources: *resourcesMedium
+  serviceAccount:
+    create: true
+    name: mysql
   storageClass: ""
   storageSize: "10Gi"
   secret:
@@ -106,6 +109,9 @@ postgres:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/postgres"
     tag: "16.1-bookworm"
   resources: *resourcesMedium
+  serviceAccount:
+    create: true
+    name: postgres
   storageClass: ""
   storageSize: "10Gi"
   secret:
@@ -138,6 +144,9 @@ elasticsearch:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/elasticsearch"
     tag: "8.8.2"
   resources: *resourcesLarge
+  serviceAccount:
+    create: true
+    name: elasticsearch
   storageClass: ""
   storageSize: "8Gi"
   secret:
@@ -155,6 +164,9 @@ objectStorage:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/minio"
     tag: "RELEASE.2022-08-22T23-53-06Z"
   resources: *resourcesMedium
+  serviceAccount:
+    create: true
+    name: minio
   storageClass: ""
   storageSize: "8Gi"
   secret:
