@@ -6,14 +6,35 @@ vars:
     sh: cat ./charts/opslevel/Chart.yaml | yq '.version'
 
 tasks:
-  prepare-self-hosted:
+  release-self-hosted:
     desc: Workflow to run in CI to prepare self-hosted release
+    cmds:
+      - task: package-self-hosted
+      - task: lint-self-hosted
+      - task: publish-self-hosted
+
+  package-self-hosted:
+    desc: Create the chart package for self-hosted chart
     deps:
       - install-helm
     cmds:
       - helm package ./charts/opslevel --dependency-update
       - mkdir -p ./manifests
-      - mv ./opslevel-{{.VERSION_DYNAMIC}}.tgz ./manifests/opslevel-{{.VERSION_DYNAMIC}}.tgz
+      - mv ./opslevel-{{ .VERSION_DYNAMIC }}.tgz ./manifests/opslevel-{{.VERSION_DYNAMIC}}.tgz
+
+  lint-self-hosted:
+    desc: Release the self-hosted chart
+    deps:
+      - install-replicated
+    cmds:
+      - replicated release lint --chart ./manifests/opslevel-{{ .VERSION_DYNAMIC }}.tgz --app opslevel
+
+  publish-self-hosted:
+    desc: Release the self-hosted chart
+    deps:
+      - install-replicated
+    cmds:
+      - replicated release create --chart ./manifests/opslevel-{{ .VERSION_DYNAMIC }}.tgz --app opslevel --version "{{ .VERSION_DYNAMIC }}" --promote "Helm" -y
 
   install-helm:
     internal: true
@@ -23,5 +44,16 @@ tasks:
         msg: '"brew" needed to install "helm"- see https://brew.sh'
     status:
       - test -n "command -v helm"
-    cmds: ["which helm > /dev/null || brew install helm"]
+    cmds:
+      - brew install helm
 
+  install-replicated:
+    internal: true
+    platforms: [darwin]
+    preconditions:
+      - sh: 'which brew'
+        msg: '"brew" needed to install "helm"- see https://brew.sh'
+    status:
+      - test -n "command -v replicated"
+    cmds:
+      - brew install replicatedhq/replicated/cli
