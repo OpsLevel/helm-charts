@@ -17,5 +17,9 @@ data:
   IS_DEPLOYED: "true"
   RAILS_ENV: "production"
   RAILS_LOG_TO_STDOUT: "enabled"
-  REDIS_URL: "{{ template "opssight.redisURL" .}}"
+  REDIS_DATABASE: "2"
+  REDIS_HOST: "{{ .Values.redis.secret.host }}"
+  REDIS_PORT: "{{ .Values.redis.secret.port }}"
+  REDIS_SECURE: "{{ .Values.redis.secret.tls }}"
+  REDIS_USERNAME: "{{ .Values.redis.secret.username }}"
 {{- end }}

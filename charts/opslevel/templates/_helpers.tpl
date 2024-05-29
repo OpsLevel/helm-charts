@@ -76,7 +76,7 @@ https://github.com/apps/{{ .Values.integrations.github.secret.app_name | urlquer
 {{- end }}
 
 {{- define "runner.image" -}}
-{{ .Values.global.proxy }}{{if .Values.global.proxy }}/{{ end }}{{ .Values.runner.image.repository }}:{{ .Values.runner.image.tag }}
+{{ .Values.runner.image.repository }}:{{ .Values.runner.image.tag }}
 {{- end }}
 
 {{- define "opssight.redisURL" -}}
