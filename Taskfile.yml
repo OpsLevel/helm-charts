@@ -23,7 +23,7 @@ tasks:
       - mv ./opslevel-{{ .VERSION_DYNAMIC }}.tgz ./manifests/opslevel-{{.VERSION_DYNAMIC}}.tgz
 
   lint-self-hosted:
-    desc: Release the self-hosted chart
+    desc: Lint the self-hosted chart
     deps:
       - install-replicated
     cmds:
