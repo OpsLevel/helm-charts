@@ -14,13 +14,13 @@ spec:
       maxUnavailable: 0%
   selector:
     matchLabels:
-      app.kuberntes.io/component: web
+      app.kubernetes.io/component: web
       app.kubernetes.io/part-of: opslevel
   revisionHistoryLimit: 3
   template:
     metadata:
       labels:
-        app.kuberntes.io/component: web
+        app.kubernetes.io/component: web
         app.kubernetes.io/part-of: opslevel
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/opslevel/configmap.yaml") . | sha256sum }}

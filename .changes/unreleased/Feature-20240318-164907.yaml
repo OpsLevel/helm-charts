@@ -1,4 +1,0 @@
-kind: Feature
-body: Bump kubernetes-sync version to v2024.3.18 (fixes bug where fields are unexpectedly
-  set to "null")
-time: 2024-03-18T16:49:07.169023-04:00

@@ -1,4 +1,0 @@
-kind: Feature
-body: Bump kubernetes-sync version to v2024.4.3 (fixes bug where service repository
-  error is logged unnecessarily)
-time: 2024-04-04T10:51:37.963005-04:00

@@ -1,4 +1,0 @@
-kind: Bugfix
-body: Fix bug where config was not being read from the /app directory, causing the
-  program to crash
-time: 2024-03-04T18:08:12.471407-05:00
