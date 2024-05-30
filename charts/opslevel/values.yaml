@@ -36,6 +36,11 @@ opslevel:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
     tag: "main-e929f7cc"
+  account:
+    name: "Main"
+    username: "Alice Wonderland"
+    email: "alice@opslevel.com"
+    password: "wonderland"
   web:
     replicas: 3
     resources: *resourcesMedium
@@ -129,11 +134,6 @@ redis:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/redis"
     tag: "6.2.6"
   resources: *resourcesMedium
-  account:
-    name: "Main"
-    username: "Alice Wonderland"
-    email: "alice@opslevel.com"
-    password: "wonderland"
   secret:
     create: true
     name: "opslevel-redis"
