@@ -2,11 +2,7 @@ global:
   certificate: ""
   nodeSelector: ""
   proxy: "proxy.replicated.com/proxy/opslevel"
-  replicated:
-    dockerconfigjson: ""
-    licenseFields:
-      opslevel_env:
-        value: "on-prem"
+  dockerconfigjson: "" # use this to override the docker pull secrets coming from replicated
   resources:
     small: &resourcesSmall
       requests:
@@ -29,6 +25,14 @@ global:
       limits:
         cpu: '4'
         memory: '8Gi'
+## The following gets automatically templated into the helm chart when pulled from replicated
+## You can verify this by using `helm pull --untar oci://registry.replicated.com/opslevel/helm/opslevel`
+## Do not try to override this as it will get replaced with data from replicated
+#  replicated:
+#    dockerconfigjson: "here2"
+#    licenseFields:
+#      opslevel_env:
+#        value: "on-prem"
 
 opslevel:
   domain: "example.com"

@@ -33,7 +33,7 @@ data:
   MAIL_SENDER_NAME: '{{ default "" .Values.smtp.secret.emailDisplayName }}'
   MAIL_USERNAME: '{{ default "" .Values.smtp.secret.emailUsername }}'
   OPSGENIE_ENABLED: 'true'
-  OPSLEVEL_ENV: '{{ default "on-prem" .Values.global.replicated.licenseFields.opslevel_env.value }}'
+  OPSLEVEL_ENV: '{{ default "on-prem" (((.Values.global.replicated).licenseFields).opslevel_env).value }}'
   OPSLEVEL_DOMAIN: '{{ default "example.com" .Values.opslevel.domain }}'
   OPSLEVEL_SUBDOMAIN: '{{ default "app" .Values.opslevel.subdomain }}'
   OPSSIGHT_BASE_URL: 'http://opssight:3000/'

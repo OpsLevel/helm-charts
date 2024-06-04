@@ -13,6 +13,16 @@ tasks:
       - task: lint-self-hosted
       - task: publish-self-hosted
 
+  render-self-hosted:
+    desc: Workflow that runs helm template and kubectl slice to inspected the rendered template
+    deps:
+      - install-helm
+      - install-kubectl-slice
+    cmds:
+      - helm template ./charts/opslevel > all.yaml
+      - kubectl slice --input-file=all.yaml --output-dir=./rendered
+      - rm all.yaml
+
   package-self-hosted:
     desc: Create the chart package for self-hosted chart
     deps:
@@ -26,15 +36,30 @@ tasks:
     desc: Lint the self-hosted chart
     deps:
       - install-replicated
+      - package-self-hosted
     cmds:
       - replicated release lint --chart ./manifests/opslevel-{{ .VERSION_DYNAMIC }}.tgz --app opslevel
 
   publish-self-hosted:
+    internal: true
     desc: Release the self-hosted chart
+    requires:
+      vars: [REPLICATED_CHANNEL]
     deps:
       - install-replicated
     cmds:
-      - replicated release create --chart ./manifests/opslevel-{{ .VERSION_DYNAMIC }}.tgz --app opslevel --version "{{ .VERSION_DYNAMIC }}" --promote "Helm" -y
+      - replicated release create --chart ./manifests/opslevel-{{ .VERSION_DYNAMIC }}.tgz --app opslevel --version "{{ .VERSION_DYNAMIC }}" --promote "{{ .REPLICATED_CHANNEL }}" -y
+
+  install-kubectl:
+    internal: true
+    platforms: [darwin]
+    preconditions:
+      - sh: 'which brew'
+        msg: '"brew" needed to install "helm"- see https://brew.sh'
+    status:
+      - test -n "command -v kubectl"
+    cmds:
+      - brew install kubectl
 
   install-helm:
     internal: true
@@ -46,6 +71,32 @@ tasks:
       - test -n "command -v helm"
     cmds:
       - brew install helm
+
+  install-krew:
+    internal: true
+    platforms: [darwin]
+    deps:
+      - install-kubectl
+    preconditions:
+      - sh: 'which brew'
+        msg: '"brew" needed to install "helm"- see https://brew.sh'
+    status:
+      - test -n "command -v kubectl-krew"
+    cmds:
+      - brew install krew
+
+  install-kubectl-slice:
+    internal: true
+    platforms: [darwin]
+    deps:
+      - install-krew
+    preconditions:
+      - sh: 'which brew'
+        msg: '"brew" needed to install "helm"- see https://brew.sh'
+    status:
+      - test -n "command -v kubectl-slice"
+    cmds:
+      - kubectl krew install slice
 
   install-replicated:
     internal: true

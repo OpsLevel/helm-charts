@@ -1,5 +1,5 @@
 {{- define "opslevel.pullSecrets" -}}
-      {{- if .Values.global.replicated.dockerconfigjson }}
+      {{- if (.Values.global.dockerconfigjson | default (.Values.global.replicated).dockerconfigjson | default false ) }}
       imagePullSecrets:
         - name: opslevel-pull-secret
       {{- end }}
