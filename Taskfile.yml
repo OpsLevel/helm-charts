@@ -50,6 +50,16 @@ tasks:
     cmds:
       - replicated release create --chart ./manifests/opslevel-{{ .VERSION_DYNAMIC }}.tgz --app opslevel --version "{{ .VERSION_DYNAMIC }}" --promote "{{ .REPLICATED_CHANNEL }}" -y
 
+  pull-self-hosted:
+    desc: Pull the replicated helm chart down to disk to inspect it
+    requires:
+      vars: [REPLICATED_CHANNEL]
+    deps:
+      - install-helm
+    cmds:
+      - mkdir -p ./downloads
+      - helm pull --untar --untardir=./downloads oci://registry.replicated.com/opslevel/{{ .REPLICATED_CHANNEL | lower }}/opslevel
+
   install-kubectl:
     internal: true
     platforms: [darwin]
