@@ -62,8 +62,6 @@ spec:
                 name: 'opslevel'
             - secretRef:
                 name: '{{ .Values.redis.secret.name }}'
-            - secretRef:
-                name: '{{ .Values.elasticsearch.secret.name }}'
             {{- template "opslevel.integration.secrets" . }}
           {{- if .Values.global.certificate }}
           volumeMounts:
