@@ -1,0 +1,204 @@
+{{- define "preflight.spec" }}
+apiVersion: troubleshoot.sh/v1beta2
+kind: Preflight
+metadata:
+  name: opslevel
+spec:
+  collectors:
+    - clusterInfo: {}
+    - clusterResources: {}
+    {{- if .Values.mysql.external }}
+    - mysql:
+        collectorName: mysql
+        {{- with .Values.mysql.secret }}
+        uri: '{{ .username }}:{{ .password }}@tcp({{ .host }}:{{ .port }})/mysql'
+        {{- end }}
+        parameters:
+          - character_set_server
+          - collation_server
+          - init_connect
+          - innodb_strict_mode
+          - log_bin_trust_function_creators
+    {{- end }}
+    {{- if .Values.postgres.external }}
+    - postgresql:
+        collectorName: postgresql
+        {{- with .Values.postgres.secret }}
+        uri: 'postgresql://{{ .username }}:{{ .password }}@{{ .host }}:{{ .port }}/{{ .databaseName }}'
+        {{- end }}
+    {{- end }}
+    {{- if .Values.redis.external }}
+    - redis:
+        collectorName: redis
+        {{- with .Values.redis.secret }}
+        uri: 'redis{{ if .tls }}s://{{ .username }}:{{ .password }}@{{ else }}://{{ end }}{{ .host }}:{{ .port }}'
+        {{- end }}
+    {{- end }}
+    {{- if .Values.elasticsearch.external }}
+    - http:
+        collectorName: elasticsearch
+        get:
+          {{- with .Values.elasticsearch.secret }}
+          url: '{{ .protocol}}://{{ .username}}:{{ .password}}@{{ .host }}:{{ .port }}'
+          {{- end }}
+    {{- end }}
+  analyzers:
+    - mysql:
+        exclude: '{{ not .Values.mysql.external }}'
+        checkName: Must be able to connect to MySQL database
+        collectorName: mysql
+        outcomes:
+          - fail:
+              when: connected == false
+              message: Cannot connect to MySQL database
+          - pass:
+              message: The MySQL database is ready
+    - redis:
+        exclude: '{{ not .Values.redis.external }}'
+        checkName: Must be able to connect to Redis server
+        collectorName: redis
+        outcomes:
+          - fail:
+              when: "connected == false"
+              message: Cannot connect to Redis server
+          - pass:
+              message: The redis server is ready
+    - nodeResources:
+        checkName: Total CPU Cores in the cluster is 16 or greater
+        outcomes:
+          - fail:
+              when: "sum(cpuCapacity) < 16"
+              message: The cluster must contain at least 16 cores
+          - pass:
+              message: There are at least 16 cores in the cluster
+    - nodeResources:
+        checkName: Total Memory in the cluster is 16 Gi or greater
+        outcomes:
+          - fail:
+              when: "sum(memoryCapacity) < 16Gi"
+              message: The cluster must contain at least 16 Gi of Memory
+          - pass:
+              message: There is at least 16 Gi of Memory in the cluster
+    - nodeResources:
+        checkName: Total pods that can be started in the cluster is 14 or greater
+        outcomes:
+          - fail:
+              when: "sum(podCapacity) < 20"
+              message: The cluster must be able to start at least 20 pods
+          - pass:
+              message: There is space for 20 pods in the cluster
+    - nodeResources:
+        checkName: The cluster must have at least 16 Gi of ephemeral storage, with 24 Gi recommended
+        outcomes:
+          - fail:
+              when: "min(ephemeralStorageCapacity) < 16Gi"
+              message: The cluster must have at least 16 Gi of ephemeral storage
+          - warn:
+              when: "min(ephemeralStorageCapacity) < 24Gi"
+              message: The cluster has less than 24 Gi of ephemeral storage - lowering default disk sizes for applications is recommended
+          - pass:
+              message: There is at least 24 Gi of ephemeral storage in the cluster
+    - jsonCompare:
+        exclude: '{{ not .Values.elasticsearch.external }}'
+        checkName: Must be able to connect to Elasticsearch cluster
+        fileName: elasticsearch.json
+        path: "response.status"
+        value: |
+          200
+        outcomes:
+          - fail:
+              when: "false"
+              message: Cannot connect to Elasticsearch cluster
+          - pass:
+              when: "true"
+              message: Connected to Elasticsearch cluster
+    # MySQL Variables Preflight Checks
+    - textAnalyze:
+        exclude: '{{ not .Values.mysql.external }}'
+        checkName: Character Set Server Config
+        collectorName: mysql
+        fileName: mysql.json
+        regex: '"character_set_server":"utf8mb4"'
+        outcomes:
+          - fail:
+              when: "false"
+              message: character_set_server variable is not set to utf8mb4
+          - pass:
+              when: "true"
+              message: character_set_server variable is set to utf8mb4
+    - textAnalyze:
+        exclude: '{{ not .Values.mysql.external }}'
+        checkName: Collation Server Config
+        collectorName: mysql
+        fileName: mysql.json
+        regex: '"collation_server":"utf8mb4_unicode_ci"'
+        outcomes:
+          - fail:
+              when: "false"
+              message: collation_server variable is not set to utf8mb4_unicode_ci
+          - pass:
+              when: "true"
+              message: collation_server variable is set to utf8mb4_unicode_ci
+    - textAnalyze:
+        exclude: '{{ not .Values.mysql.external }}'
+        checkName: Innodb Strict Mode Config
+        collectorName: mysql
+        fileName: mysql.json
+        regex: '"innodb_strict_mode":"ON"'
+        outcomes:
+          - fail:
+              when: "false"
+              message: innodb_strict_mode variable is not set to ON
+          - pass:
+              when: "true"
+              message: innodb_strict_mode variable is set to ON
+    - textAnalyze:
+        exclude: '{{ not .Values.mysql.external }}'
+        checkName: Log Bin Trust Function Creators Config
+        collectorName: mysql
+        fileName: mysql.json
+        regex: '"log_bin_trust_function_creators":"ON"'
+        outcomes:
+          - fail:
+              when: "false"
+              message: log_bin_trust_function_creators variable is not set to ON
+          - pass:
+              when: "true"
+              message: log_bin_trust_function_creators variable is set to ON
+    - textAnalyze:
+        exclude: '{{ not .Values.mysql.external }}'
+        checkName: Init Connect Collation Connection Config
+        collectorName: mysql
+        fileName: mysql.json
+        regex: 'init_connect.*collation_connection = utf8mb4_unicode_ci'
+        outcomes:
+          - fail:
+              when: "false"
+              message: SET collation_connection in init_connect variable is not set to utf8mb4_unicode_ci
+          - pass:
+              when: "true"
+              message: SET collation_connection in init_connect variable is set to utf8mb4_unicode_ci
+    - textAnalyze:
+        exclude: '{{ not .Values.mysql.external }}'
+        checkName: Init Connect Names Config
+        collectorName: mysql
+        fileName: mysql.json
+        regex: 'init_connect.*NAMES utf8mb4'
+        outcomes:
+          - fail:
+              when: "false"
+              message: NAMES in init_connect variable is not set to utf8mb4
+          - pass:
+              when: "true"
+              message: NAMES in init_connect variable is set to utf8mb4
+{{- end }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    troubleshoot.sh/kind: preflight
+  name: preflight
+stringData:
+  preflight.yaml: |
+{{- include "preflight.spec"  . | indent 4 }}
