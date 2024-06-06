@@ -80,7 +80,7 @@ spec:
           - pass:
               message: There is at least 16 Gi of Memory in the cluster
     - nodeResources:
-        checkName: Total pods that can be started in the cluster is 14 or greater
+        checkName: Total pods that can be started in the cluster is 20 or greater
         outcomes:
           - fail:
               when: "sum(podCapacity) < 20"
