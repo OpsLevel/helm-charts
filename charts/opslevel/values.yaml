@@ -172,6 +172,8 @@ objectStorage:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/minio"
     tag: "RELEASE.2022-08-22T23-53-06Z"
+    repositoryCLI: "minio/mc"
+    tagCLI: "RELEASE.2023-02-28T00-12-59Z"
   resources: *resourcesMedium
   serviceAccount:
     create: true

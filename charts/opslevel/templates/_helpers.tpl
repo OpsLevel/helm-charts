@@ -75,6 +75,10 @@ https://github.com/apps/{{ .Values.integrations.github.secret.app_name | urlquer
 {{ .Values.global.proxy }}{{if .Values.global.proxy }}/{{ end }}{{ .Values.objectStorage.image.repository }}:{{ .Values.objectStorage.image.tag }}
 {{- end }}
 
+{{- define "objectStorageCLI.image" -}}
+{{ .Values.objectStorage.image.repositoryCLI }}:{{ .Values.objectStorage.image.tagCLI }}
+{{- end }}
+
 {{- define "runner.image" -}}
 {{ .Values.runner.image.repository }}:{{ .Values.runner.image.tag }}
 {{- end }}
