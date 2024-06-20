@@ -1,0 +1,3 @@
+kind: Bugfix
+body: Fix opslevel-runner api-url to use the proper k8s service discovery env vars
+time: 2024-06-20T14:36:15.842068-05:00

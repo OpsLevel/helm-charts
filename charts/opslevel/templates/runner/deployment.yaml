@@ -52,7 +52,7 @@ spec:
           imagePullPolicy: IfNotPresent
           args:
             - run
-            - --api-url=http://$(WEB_SERVICE_HOST):$(WEB_SERVICE_PORT_WEB)
+            - --api-url=http://$(OPSLEVEL_SERVICE_HOST):$(OPSLEVEL_SERVICE_PORT_HTTP)
             - --job-pod-namespace={{ .Release.Namespace }}
             - --job-pod-max-wait=300
             - --job-pod-requests-cpu=300
