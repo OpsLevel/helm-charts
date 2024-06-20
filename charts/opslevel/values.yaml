@@ -68,7 +68,7 @@ runner:
   enabled: false
   image:
     repository: "public.ecr.aws/opslevel/opslevel-runner"
-    tag: "v2023.5.16"
+    tag: "v2024.5.16"
   replicas: 3
   resources: *resourcesLarge
   secret:
