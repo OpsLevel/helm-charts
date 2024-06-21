@@ -11,7 +11,7 @@ data:
   ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_BUCKET: '{{ .Values.objectStorage.secret.bucket_name }}'
   ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_REGION: '{{ .Values.objectStorage.secret.region }}'
   {{- if eq .Values.objectStorage.type "minio" }}
-  ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_ENDPOINT: 'http://storage.{{ .Release.Namespace }}.svc.cluster.local:9000/'
+  ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_ENDPOINT: 'http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000/'
   {{- else }}
   ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_ENDPOINT: ''
   {{- end }}
