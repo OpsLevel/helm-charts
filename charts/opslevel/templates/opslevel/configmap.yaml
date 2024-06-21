@@ -8,7 +8,7 @@ metadata:
 data:
   # Please Keep Alphabetized
   ACTIVE_STORAGE_SERVICE_TYPE: '{{ .Values.objectStorage.type }}'
-  ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_BUCKET: '{{ .Values.objectStorage.secret.bucket_name }}'
+  ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_BUCKET: '{{ .Values.objectStorage.secret.bucketName }}'
   ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_REGION: '{{ .Values.objectStorage.secret.region }}'
   {{- if eq .Values.objectStorage.type "minio" }}
   ACTIVE_STORAGE_{{ .Values.objectStorage.type | upper }}_ENDPOINT: 'http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000/'
