@@ -37,6 +37,7 @@ global:
 opslevel:
   domain: "example.com"
   subdomain: "self-hosted"
+  forceSSL: false
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
     tag: "main-e929f7cc"

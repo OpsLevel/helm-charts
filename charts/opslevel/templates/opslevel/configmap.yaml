@@ -26,7 +26,7 @@ data:
   DEV_ACCOUNT_NAME: '{{ .Values.opslevel.account.name }}'
   DEV_NAME: '{{ .Values.opslevel.account.username }}'
   DEV_EMAIL: '{{ .Values.opslevel.account.email }}'
-  FORCE_SSL: 'false'
+  FORCE_SSL: '{{ .Values.opslevel.forceSSL }}'
   LANG: 'en_US.UTF-8'
   LOG_TRACING_METADATA: 'false'
   MAIL_DOMAIN: '{{ default .Values.opslevel.domain .Values.smtp.secret.emailDomain }}'
