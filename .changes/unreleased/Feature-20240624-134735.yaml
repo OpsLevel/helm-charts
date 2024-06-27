@@ -1,4 +1,0 @@
-kind: Feature
-body: Add ability to host the app behind an HTTPS address by overriding a ruby configuration
-  for SSL with the value `opslevel.forceSSL`
-time: 2024-06-24T13:47:35.132205-05:00

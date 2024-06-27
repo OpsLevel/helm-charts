@@ -1,3 +1,0 @@
-kind: Bugfix
-body: Add missed smtp password env var
-time: 2024-06-27T10:42:57.377444-05:00
