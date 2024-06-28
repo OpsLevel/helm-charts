@@ -44,7 +44,7 @@
 {{- end }}
 
 {{- define "github.install.url" -}}
-https://github.com/apps/{{ .Values.integrations.github.secret.app_name | urlquery }}/installations/new
+https://github.com/apps/{{ required "please provide 'integrations.github.secret.appName'" .Values.integrations.github.secret.appName | urlquery }}/installations/new
 {{- end }}
 
 {{- define "opslevel.image" -}}
