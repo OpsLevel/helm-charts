@@ -192,7 +192,7 @@ objectStorage:
 smtp:
   enabled: false
   secret:
-    create: false
+    create: true
     name: "opslevel-smtp"
     emailDisplayName: "opslevel"
     emailDomain: ""
