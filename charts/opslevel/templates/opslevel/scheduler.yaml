@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: opslevel-worker-low
+  name: opslevel-scheduler
   labels:
-    app.kubernetes.io/component: worker-low
+    app.kubernetes.io/component: scheduler
     app.kubernetes.io/part-of: opslevel
 spec:
   replicas: {{ .Values.opslevel.workerLow.replicas }}
@@ -15,12 +15,12 @@ spec:
       maxUnavailable: 75%
   selector:
     matchLabels:
-      app.kuberntes.io/component: worker-low
+      app.kuberntes.io/component: scheduler
       app.kubernetes.io/part-of: opslevel
   template:
     metadata:
       labels:
-        app.kuberntes.io/component: worker-low
+        app.kuberntes.io/component: scheduler
         app.kubernetes.io/part-of: opslevel
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/opslevel/configmap.yaml") . | sha256sum }}
@@ -73,18 +73,19 @@ spec:
               mountPath: /etc/ssl/certs
           {{- end }}
       containers:
-        - name: low-priority
+        - name: scheduler
           image: "{{ template "opslevel.image" . }}"
           imagePullPolicy: IfNotPresent
           args:
             - bundle
             - exec
             - sidekiq
-            - -C ./config/low-priority-sidekiq.yml
+          envFrom: *envFrom
           env:
             - name: SIDEKIQ_CONCURRENCY
-              value: "3"
-          envFrom: *envFrom
+              value: "1"
+            - name: SIDEKIQ_SCHEDULER
+              value: "true"
           {{- with .Values.opslevel.workerLow.resources }}
           resources:
             {{- toYaml . | nindent 12 }}

@@ -1,0 +1,3 @@
+kind: Bugfix
+body: Ensure the sidekiq scheduler only runs one copy of itself
+time: 2024-07-10T15:34:28.483412-05:00

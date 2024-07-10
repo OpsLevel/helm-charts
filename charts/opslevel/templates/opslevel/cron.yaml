@@ -26,7 +26,7 @@ spec:
       initContainers:
         {{- if .Values.global.certificate }}
         - name: init-certs
-          image: ruby:3.2.2
+          image: "{{ template "opslevel.image" . }}"
           imagePullPolicy: IfNotPresent
           command:
             - sh

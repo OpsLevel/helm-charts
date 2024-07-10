@@ -33,7 +33,7 @@ spec:
       initContainers:
         {{- if .Values.global.certificate }}
         - name: init-certs
-          image: ruby:3.2.2
+          image: "{{ template "opslevel.image" . }}"
           imagePullPolicy: IfNotPresent
           command:
             - sh
@@ -81,6 +81,9 @@ spec:
             - exec
             - sidekiq
             - -C ./config/high-priority-sidekiq.yml
+          env:
+            - name: SIDEKIQ_CONCURRENCY
+              value: "3"
           envFrom: *envFrom
           {{- with .Values.opslevel.workerHigh.resources }}
           resources:
