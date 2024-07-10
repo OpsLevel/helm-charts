@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/component: scheduler
     app.kubernetes.io/part-of: opslevel
 spec:
-  replicas: {{ .Values.opslevel.workerLow.replicas }}
+  replicas: 1
   revisionHistoryLimit: 3
   strategy:
     type: RollingUpdate
