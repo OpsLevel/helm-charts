@@ -1,3 +1,0 @@
-kind: Security
-body: Remove usage of Ruby:3.2.2 image because of CVE 2024-6387
-time: 2024-07-10T15:35:04.217168-05:00
