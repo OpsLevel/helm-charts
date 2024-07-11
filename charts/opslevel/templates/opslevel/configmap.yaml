@@ -23,6 +23,7 @@ data:
   CRONTAB: 'crontab.prod'
   DATABASE_SSL_CERT_PATH: ''
   DD_INSTRUMENTATION_ENABLED: 'false'
+  DD_TRACE_ENABLED: "false"
   DEV_ACCOUNT_NAME: '{{ .Values.opslevel.account.name }}'
   DEV_NAME: '{{ .Values.opslevel.account.username }}'
   DEV_EMAIL: '{{ .Values.opslevel.account.email }}'
