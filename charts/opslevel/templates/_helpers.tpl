@@ -83,6 +83,10 @@ https://github.com/apps/{{ required "please provide 'integrations.github.secret.
 {{ .Values.runner.image.repository }}:{{ .Values.runner.image.tag }}
 {{- end }}
 
-{{- define "opssight.redisURL" -}}
-redis://{{ .Values.redis.secret.host }}:{{ .Values.redis.secret.port }}/0
+{{- define "faktory.image" -}}
+{{ .Values.global.proxy }}{{if .Values.global.proxy }}/{{ end }}{{ .Values.faktory.image.repository }}:{{ .Values.faktory.image.tag }}
+{{- end }}
+
+{{- define "faktory.url" -}}
+tcp://admin:{{ .Values.faktory.secret.password }}@faktory:7419
 {{- end }}

@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: faktory
+  labels:
+    app.kubernetes.io/name: faktory
+    app.kubernetes.io/instance: opslevel
+spec:
+  replicas: 1
+  serviceName: faktory
+  updateStrategy:
+    type: OnDelete
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: faktory
+      app.kubernetes.io/instance: opslevel
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: faktory
+        app.kubernetes.io/instance: opslevel
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/faktory/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/faktory/secret.yaml") . | sha256sum }}
+    spec:
+      terminationGracePeriodSeconds: 10
+      shareProcessNamespace: true
+      containers:
+        - name: server
+          image: {{ template "faktory.image" . }}
+          imagePullPolicy: IfNotPresent
+          command:
+            - /faktory
+            - -b
+            - :7419
+            - -w
+            - :7420
+            - -l
+            - info
+            - -e
+            - staging
+          envFrom:
+            - secretRef:
+                name: {{ .Values.faktory.secret.name }}
+          {{- with .Values.faktory.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: 7419
+              name: server
+              protocol: TCP
+            - containerPort: 7420
+              name: ui
+          livenessProbe:
+            tcpSocket:
+              port: server
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            tcpSocket:
+              port: server
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/faktory
+            - name: configs
+              mountPath: /etc/faktory/conf.d
+      volumes:
+        - name: configs
+          configMap:
+            name: opslevel-faktory
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        {{- if .Values.faktory.storageClass }}
+        storageClassName: '{{ .Values.faktory.storageClass }}'
+        {{- end }}
+        resources:
+          requests:
+            storage: '{{ .Values.faktory.storageSize }}'

@@ -189,6 +189,17 @@ objectStorage:
     secretKey: "admin1234"
     region: "us-east-1"
 
+faktory:
+  image:
+    repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/faktory"
+    tag: "1.9.0"
+  resources: *resourcesMedium
+  storageClass: ""
+  storageSize: "8Gi"
+  secret:
+    name: "opslevel-faktory"
+    password: "admin1234"
+
 smtp:
   enabled: false
   secret:
