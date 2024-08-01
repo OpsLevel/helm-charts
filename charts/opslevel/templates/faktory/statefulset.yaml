@@ -40,8 +40,6 @@ spec:
             - :7420
             - -l
             - info
-            - -e
-            - staging
           envFrom:
             - secretRef:
                 name: {{ .Values.faktory.secret.name }}
