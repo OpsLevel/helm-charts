@@ -23,8 +23,11 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/faktory/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/faktory/secret.yaml") . | sha256sum }}
     spec:
+      {{- template "opslevel.pullSecrets" . }}
+      {{- template "global.nodeSelector" . }}
       terminationGracePeriodSeconds: 10
       shareProcessNamespace: true
+      priorityClassName: opslevel-critical
       containers:
         - name: server
           image: {{ template "faktory.image" . }}
