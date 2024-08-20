@@ -40,7 +40,7 @@ opslevel:
   forceSSL: false
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
-    tag: "selfhosted-prod-30b360f6-1721337612"
+    tag: "selfhosted-prod-2d130e5f-1722364048"
   account:
     name: "Main"
     username: "Alice Wonderland"
@@ -81,7 +81,7 @@ opssight:
   enabled: true
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opssight"
-    tag: "selfhosted-production-8820bbb-1720636810"
+    tag: "selfhosted-production-5ae0e7c-1722281380"
   web:
     replicas: 2
     resources: *resourcesMedium
@@ -188,6 +188,17 @@ objectStorage:
     accessKey: "admin"
     secretKey: "admin1234"
     region: "us-east-1"
+
+faktory:
+  image:
+    repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/faktory"
+    tag: "1.9.0"
+  resources: *resourcesMedium
+  storageClass: ""
+  storageSize: "8Gi"
+  secret:
+    name: "opslevel-faktory"
+    password: "admin1234"
 
 smtp:
   enabled: false

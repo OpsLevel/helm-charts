@@ -1,0 +1,96 @@
+{{- if .Values.runner.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opslevel-runner-faktory
+  labels:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/part-of: runner-faktory
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/part-of: runner-faktory
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: app
+        app.kubernetes.io/part-of: runner-faktory
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/runner/secret.yaml") . | sha256sum }}
+    spec:
+      {{- template "global.nodeSelector" . }}
+      priorityClassName: opslevel-normal
+      serviceAccountName: opslevel-runner
+      {{- if .Values.global.certificate }}
+      initContainers:
+        - name: init-certs
+          image: "{{ template "opslevel.image" . }}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - sleep 10; update-ca-certificates; cp -r /etc/ssl/certs/. /data;
+          volumeMounts:
+            - name: certificate
+              mountPath: /usr/local/share/ca-certificates/custom-cert.crt
+              subPath: custom-cert.crt
+              readOnly: false
+            - name: ca
+              mountPath: /data
+              readOnly: false
+      {{- end }}
+      containers:
+        - name: runner
+          image: '{{ template "runner.image" . }}'
+          imagePullPolicy: IfNotPresent
+          args:
+            - run
+            - --mode=faktory
+            - --queues=runner
+            - --job-pod-namespace={{ .Release.Namespace }}
+            - --job-pod-max-wait=300
+            - --job-pod-requests-cpu=300
+            - --job-pod-limits-cpu=1000
+            - --job-pod-requests-memory=512
+            - --job-pod-limits-memory=2048
+          env:
+          - name: RUNNER_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: RUNNER_POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          envFrom: &envFrom
+            - secretRef:
+                name: '{{ .Values.runner.secret.name }}'
+          {{- with .Values.runner.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.global.certificate }}
+          volumeMounts:
+            - name: certificate
+              mountPath: /usr/local/share/ca-certificates/custom-cert.crt
+              subPath: custom-cert.crt
+              readOnly: false
+            - name: ca
+              mountPath: /etc/ssl/certs
+          {{- end }}
+      {{- if .Values.global.certificate }}
+      volumes:
+        - name: ca
+          emptyDir: {}
+        - name: certificate
+          secret:
+            secretName: opslevel-certificate
+      {{- end }}
+{{- end }}

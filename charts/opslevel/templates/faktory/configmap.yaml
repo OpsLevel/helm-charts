@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opslevel-faktory
+  labels:
+    app.kubernetes.io/name: faktory
+    app.kubernetes.io/instance: opslevel
+data:
+  webui.toml: |-
+    [webui]
+    title = "OpsLevel Faktory"
