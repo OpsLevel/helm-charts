@@ -21,6 +21,7 @@ sync:
                 - .metadata.annotations."opslevel.com/ignore"
           opslevel:
             aliases:
+                - .metadata.name
                 - '"k8s:\(.metadata.name)-\(.metadata.namespace)"'
                 - '"\(.metadata.namespace)-\(.metadata.name)"'
             description: .metadata.annotations."opslevel.com/description"
