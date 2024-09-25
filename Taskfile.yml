@@ -6,6 +6,16 @@ vars:
     sh: cat ./charts/opslevel/Chart.yaml | yq '.version'
 
 tasks:
+  setup:
+    desc: Workflow to run in CI to prepare self-hosted release
+    deps:
+      - install-kubectl
+      - install-krew
+    cmds:
+      - task: install-helm
+      - task: install-kubectl-slice
+      - task: install-replicated
+
   release-self-hosted:
     desc: Workflow to run in CI to prepare self-hosted release
     cmds:
