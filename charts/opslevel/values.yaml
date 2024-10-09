@@ -214,6 +214,13 @@ smtp:
     username: ""
 
 integrations:
+  aws: # Docs:
+    enabled: false
+    secret:
+      create: true
+      name: "opslevel-aws-devops"
+      accessKey: ""
+      secretKey: ""
   azureDevOps: # Docs:
     enabled: false
     secret:
