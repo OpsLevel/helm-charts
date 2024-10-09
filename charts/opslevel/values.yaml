@@ -218,7 +218,7 @@ integrations:
     enabled: false
     secret:
       create: true
-      name: "opslevel-aws-devops"
+      name: "opslevel-aws-int"
       accessKey: ""
       secretKey: ""
   azureDevOps: # Docs:
