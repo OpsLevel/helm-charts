@@ -13,6 +13,10 @@
 {{- end }}
 
 {{- define "opslevel.integration.secrets" -}}
+{{- if .Values.integrations.aws.enabled }}
+            - secretRef:
+                name: '{{ .Values.integrations.aws.secret.name }}'
+{{- end }}
 {{- if .Values.integrations.azureDevOps.enabled }}
             - secretRef:
                 name: '{{ .Values.integrations.azureDevOps.secret.name }}'

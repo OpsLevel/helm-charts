@@ -1,7 +1,7 @@
 apiVersion: "v2"
 name: "opslevel"
 type: "application"
-version: "2024.9.16"
+version: "2024.10.11"
 appVersion: "2024.9.16"
 description: "The OpsLevel internal developer portal helps your team ship fast without risking your software standards."
 home: "https://www.opslevel.com/"
