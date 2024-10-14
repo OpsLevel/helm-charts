@@ -40,7 +40,7 @@ opslevel:
   forceSSL: false
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
-    tag: "selfhosted-prod-5a1ef738-1726518345"
+    tag: "selfhosted-prod-6680e718-1728679480"
   account:
     name: "Main"
     username: "Alice Wonderland"
@@ -81,7 +81,7 @@ opssight:
   enabled: true
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opssight"
-    tag: "selfhosted-production-5ae0e7c-1722281380"
+    tag: "selfhosted-production-b8a797f-1726845192"
   web:
     replicas: 2
     resources: *resourcesMedium
