@@ -43,7 +43,7 @@ data:
   RACK_TIMEOUT_WAIT_TIMEOUT: '35'
   RAILS_LOG_TO_STDOUT: 'enabled'
   RAILS_SERVE_STATIC_FILES: 'enabled'
-  REPLICATED_SDK_URL: 'http://replicated:3000'
+  REPLICATED_SDK_URI: 'http://replicated:3000'
   SMTP_HOST: '{{ .Values.smtp.secret.host }}'
   SMTP_PORT: '{{ .Values.smtp.secret.port }}'
   SMTP_USERNAME: '{{ .Values.smtp.secret.username }}'
