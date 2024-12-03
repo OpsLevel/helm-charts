@@ -1,5 +1,4 @@
 global:
-  certificate: ""
   nodeSelector: ""
   proxy: "proxy.replicated.com/proxy/opslevel"
   dockerconfigjson: "" # use this to override the docker pull secrets coming from replicated
@@ -274,5 +273,10 @@ integrations:
       signingSecret: ""
       verificationToken: ""
 
-
+certificate:
+  enabled: false
+  secret:
+    create: true
+    name: "opslevel-certificate"
+    crt: ""
 

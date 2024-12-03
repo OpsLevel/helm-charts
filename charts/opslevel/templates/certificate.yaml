@@ -1,12 +1,14 @@
-{{- if .Values.global.certificate }}
+{{- if .Values.certificate.enabled }}
+{{- if .Values.certificate.secret.create }}
 apiVersion: v1
 kind: Secret
 metadata:
-  name: certificate
+  name: {{ .Values.certificate.secret.name }}
   labels:
     app.kubernetes.io/component: certificate
     app.kubernetes.io/part-of: opslevel
 type: Opaque
 data:
-  custom-cert.crt: '{{ .Values.global.certificate | b64enc }}'
+  custom-cert.crt: '{{ .Values.certificate.secret.crt | b64enc }}'
+{{- end }}
 {{- end }}
