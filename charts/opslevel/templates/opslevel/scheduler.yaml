@@ -51,10 +51,16 @@ spec:
         - name: migrations
           image: "{{ template "opslevel.image" . }}"
           args:
-            - bundle
-            - exec
-            - rake
-            - db:abort_if_pending_migrations
+            - ./bin/init-db
+          env: &env
+            - name: SIDEKIQ_CONCURRENCY
+              value: "1"
+            - name: SIDEKIQ_SCHEDULER
+              value: "true"
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
           envFrom: &envFrom
             - configMapRef:
                 name: 'opslevel'
@@ -62,6 +68,8 @@ spec:
                 name: 'opslevel'
             - secretRef:
                 name: '{{ .Values.redis.secret.name }}'
+            - secretRef:
+                name: '{{ .Values.elasticsearch.secret.name }}'
             {{- template "opslevel.integration.secrets" . }}
           {{- if .Values.global.certificate }}
           volumeMounts:
@@ -81,11 +89,7 @@ spec:
             - exec
             - sidekiq
           envFrom: *envFrom
-          env:
-            - name: SIDEKIQ_CONCURRENCY
-              value: "1"
-            - name: SIDEKIQ_SCHEDULER
-              value: "true"
+          env: *env
           {{- with .Values.opslevel.workerLow.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
