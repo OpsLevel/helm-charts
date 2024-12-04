@@ -20,6 +20,9 @@ spec:
         app.kubernetes.io/part-of: elasticsearch
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/elasticsearch/secret.yaml") . | sha256sum }}
+{{- with .Values.elasticsearch.pod.annotations }}
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}

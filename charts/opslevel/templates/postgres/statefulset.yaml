@@ -24,6 +24,9 @@ spec:
         app.kubernetes.io/part-of: postgres
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/postgres/secret.yaml") . | sha256sum }}
+{{- with .Values.postgres.pod.annotations }}
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}

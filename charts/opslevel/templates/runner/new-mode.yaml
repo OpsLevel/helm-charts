@@ -24,6 +24,9 @@ spec:
         app.kubernetes.io/part-of: runner-faktory
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/runner/secret.yaml") . | sha256sum }}
+{{- with .Values.runner.pod.annotations }}
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
       {{- template "global.nodeSelector" . }}
       priorityClassName: opslevel-normal

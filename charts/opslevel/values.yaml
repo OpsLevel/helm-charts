@@ -45,6 +45,8 @@ opslevel:
     username: "Alice Wonderland"
     email: "alice@opslevel.com"
     password: "wonderland"
+  pod:
+    annotations: {}
   web:
     replicas: 3
     resources: *resourcesMedium
@@ -79,6 +81,8 @@ runner:
     create: true
     name: opslevel-runner
     annotations: {}
+  pod:
+    annotations: {}
   secret:
     name: "opslevel-runner"
     create: true
@@ -89,6 +93,8 @@ opssight:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opssight"
     tag: "selfhosted-production-b8a797f-1726845192"
+  pod:
+    annotations: {}
   web:
     replicas: 2
     resources: *resourcesMedium
@@ -106,6 +112,8 @@ mysql:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/mysql"
     tag: "8.0.34-debian"
   resources: *resourcesMedium
+  pod:
+    annotations: {}
   serviceAccount:
     create: true
     name: mysql
@@ -127,6 +135,8 @@ postgres:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/postgres"
     tag: "16.1-bookworm"
   resources: *resourcesMedium
+  pod:
+    annotations: {}
   serviceAccount:
     create: true
     name: postgres
@@ -148,6 +158,8 @@ redis:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/redis"
     tag: "6.2.6"
   resources: *resourcesMedium
+  pod:
+    annotations: {}
   secret:
     create: true
     name: "opslevel-redis"
@@ -163,6 +175,8 @@ elasticsearch:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/elasticsearch"
     tag: "8.8.2"
   resources: *resourcesLarge
+  pod:
+    annotations: {}
   serviceAccount:
     create: true
     name: elasticsearch
@@ -186,6 +200,8 @@ objectStorage:
     repositoryCLI: "minio/mc"
     tagCLI: "RELEASE.2023-02-28T00-12-59Z"
   resources: *resourcesMedium
+  pod:
+    annotations: {}
   serviceAccount:
     create: true
     name: minio
@@ -207,6 +223,8 @@ faktory:
   resources: *resourcesMedium
   storageClass: ""
   storageSize: "8Gi"
+  pod:
+    annotations: {}
   secret:
     name: "opslevel-faktory"
     password: "admin1234"
