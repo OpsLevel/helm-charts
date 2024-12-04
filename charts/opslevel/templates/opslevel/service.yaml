@@ -1,10 +1,15 @@
+{{- if .Values.opslevel.service.create }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: opslevel
+  name: {{ .Values.opslevel.service.name }}
   labels:
     app.kubernetes.io/component: service
     app.kubernetes.io/part-of: opslevel
+{{- with .Values.opslevel.service.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
 spec:
   ports:
   - name: http
@@ -13,4 +18,4 @@ spec:
   selector:
     app.kubernetes.io/component: web
     app.kubernetes.io/part-of: opslevel
-
+{{- end }}

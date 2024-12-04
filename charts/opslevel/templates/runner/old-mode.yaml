@@ -27,7 +27,7 @@ spec:
     spec:
       {{- template "global.nodeSelector" . }}
       priorityClassName: opslevel-normal
-      serviceAccountName: opslevel-runner
+      serviceAccountName: {{ .Values.runner.serviceAccount.name }}
       {{- if .Values.certificate.enabled }}
       initContainers:
         - name: init-certs
