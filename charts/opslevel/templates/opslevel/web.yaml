@@ -126,6 +126,10 @@ spec:
               mountPath: /usr/local/share/ca-certificates/custom-cert.crt
               subPath: custom-cert.crt
               readOnly: false
+            - name: certificate
+              mountPath: /usr/local/share/ca-certificates/custom-cert.key
+              subPath: custom-cert.key
+              readOnly: false
             - name: ca
               mountPath: /etc/ssl/certs
           {{- end }}
