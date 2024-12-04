@@ -279,4 +279,5 @@ certificate:
     create: true
     name: "opslevel-certificate"
     crt: ""
+    key: ""
 
