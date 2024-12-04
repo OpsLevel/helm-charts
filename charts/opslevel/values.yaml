@@ -54,6 +54,10 @@ opslevel:
   workerLow:
     replicas: 2
     resources: *resourcesMedium
+  service:
+    create: true
+    name: "opslevel" &opslevel_service_name
+    annotations: {}
   secret:
     name: "opslevel"
     create: true
@@ -71,6 +75,10 @@ runner:
     tag: "v2024.10.14"
   replicas: 3
   resources: *resourcesLarge
+  serviceAccount:
+    create: true
+    name: opslevel-runner
+    annotations: {}
   secret:
     name: "opslevel-runner"
     create: true
@@ -101,6 +109,7 @@ mysql:
   serviceAccount:
     create: true
     name: mysql
+    annotations: {}
   storageClass: ""
   storageSize: "10Gi"
   secret:
@@ -121,6 +130,7 @@ postgres:
   serviceAccount:
     create: true
     name: postgres
+    annotations: {}
   storageClass: ""
   storageSize: "10Gi"
   secret:
@@ -156,6 +166,7 @@ elasticsearch:
   serviceAccount:
     create: true
     name: elasticsearch
+    annotations: {}
   storageClass: ""
   storageSize: "8Gi"
   secret:
@@ -178,6 +189,7 @@ objectStorage:
   serviceAccount:
     create: true
     name: minio
+    annotations: {}
   storageClass: ""
   storageSize: "8Gi"
   secret:

@@ -1,11 +1,17 @@
 {{- if .Values.runner.enabled }}
+{{- if .Values.runner.serviceAccount.create }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: opslevel-runner
+  name: {{ .Values.runner.serviceAccount.name }}
   labels:
     app.kubernetes.io/component: serviceAccount
     app.kubernetes.io/part-of: runner
+{{- with .Values.runner.serviceAccount.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- end }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
