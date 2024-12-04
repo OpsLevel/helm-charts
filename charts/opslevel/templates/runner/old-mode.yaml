@@ -28,7 +28,7 @@ spec:
       {{- template "global.nodeSelector" . }}
       priorityClassName: opslevel-normal
       serviceAccountName: opslevel-runner
-      {{- if .Values.global.certificate }}
+      {{- if .Values.certificate.enabled }}
       initContainers:
         - name: init-certs
           image: "{{ template "opslevel.image" . }}"
@@ -78,7 +78,7 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if .Values.global.certificate }}
+          {{- if .Values.certificate.enabled }}
           volumeMounts:
             - name: certificate
               mountPath: /usr/local/share/ca-certificates/custom-cert.crt
@@ -87,12 +87,12 @@ spec:
             - name: ca
               mountPath: /etc/ssl/certs
           {{- end }}
-      {{- if .Values.global.certificate }}
+      {{- if .Values.certificate.enabled }}
       volumes:
         - name: ca
           emptyDir: {}
         - name: certificate
           secret:
-            secretName: opslevel-certificate
+            secretName: {{ .Values.certificate.secret.name }}
       {{- end }}
 {{- end }}
