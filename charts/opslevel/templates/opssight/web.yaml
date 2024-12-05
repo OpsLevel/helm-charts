@@ -25,6 +25,9 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/opssight/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/opssight/secret.yaml") . | sha256sum }}
+{{- with .Values.opssight.pod.annotations }}
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}

@@ -22,6 +22,9 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/faktory/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/faktory/secret.yaml") . | sha256sum }}
+{{- with .Values.faktory.pod.annotations }}
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}

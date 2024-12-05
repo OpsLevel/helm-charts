@@ -20,6 +20,11 @@ spec:
       labels:
         app.kubernetes.io/component: app
         app.kubernetes.io/part-of: redis
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/redis/secret.yaml") . | sha256sum }}
+{{- with .Values.redis.pod.annotations }}
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
