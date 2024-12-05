@@ -58,6 +58,24 @@ opslevel:
     create: true
     name: "opslevel" &opslevel_service_name
     annotations: {}
+  ingress:
+    create: false
+    name: opslevel
+    annotations: {}
+    ingressClassName: ""
+    tls:
+      - hosts:
+        - opslevel.example.com
+    rules:
+      - host: opslevel.example.com
+        http:
+          paths:
+            - path: /
+              pathType: Prefix
+              backend:
+                service:
+                  <<: *opslevel_service_name
+                  port: http
   secret:
     name: "opslevel"
     create: true
