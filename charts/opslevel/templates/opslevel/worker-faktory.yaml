@@ -33,8 +33,8 @@ spec:
       {{- template "global.nodeSelector" . }}
       priorityClassName: opslevel-normal
       terminationGracePeriodSeconds: 300
+      {{- if .Values.certificate.enabled }}
       initContainers:
-        {{- if .Values.certificate.enabled }}
         - name: init-certs
           image: "{{ template "opslevel.image" . }}"
           imagePullPolicy: IfNotPresent
@@ -50,15 +50,16 @@ spec:
             - name: ca
               mountPath: /data
               readOnly: false
-        {{- end }}
-        - name: migrations
+      {{- end }}
+      containers:
+        - name: worker-faktory
           image: "{{ template "opslevel.image" . }}"
+          imagePullPolicy: IfNotPresent
           args:
-            - bundle
-            - exec
-            - rake
-            - db:abort_if_pending_migrations
-          envFrom: &envFrom
+            - ./bin/run
+            - faktory-worker
+            - -C config/faktory.yml
+          envFrom:
             - configMapRef:
                 name: 'opslevel'
             - secretRef:
@@ -66,28 +67,6 @@ spec:
             - secretRef:
                 name: '{{ .Values.redis.secret.name }}'
             {{- template "opslevel.integration.secrets" . }}
-          {{- if .Values.certificate.enabled }}
-          volumeMounts:
-            - name: certificate
-              mountPath: /usr/local/share/ca-certificates/custom-cert.crt
-              subPath: custom-cert.crt
-              readOnly: false
-            - name: ca
-              mountPath: /etc/ssl/certs
-          {{- end }}
-      containers:
-        - name: worker-faktory
-          image: "{{ template "opslevel.image" . }}"
-          imagePullPolicy: IfNotPresent
-          args:
-            - bundle
-            - exec
-            - faktory-worker
-            - -C config/faktory.yml
-          envFrom: *envFrom
-          env:
-            - name: SIDEKIQ_CONCURRENCY
-              value: "3"
           {{- with .Values.opslevel.workerLow.resources }}
           resources:
             {{- toYaml . | nindent 12 }}

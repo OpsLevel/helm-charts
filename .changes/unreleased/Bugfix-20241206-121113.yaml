@@ -1,0 +1,4 @@
+kind: Bugfix
+body: 'BREAKING CHANGE: Fix opslevel self-hosted chart certification configuration
+  to work like other secret configurtion and actually inject the cert'
+time: 2024-12-06T12:11:13.20789-06:00

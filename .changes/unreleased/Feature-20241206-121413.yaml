@@ -1,0 +1,4 @@
+kind: Feature
+body: Change opslevel self-hosted chart to use explict sidekiq queue list instead
+  of hardcoded files - similar to SAAS
+time: 2024-12-06T12:14:13.290775-06:00

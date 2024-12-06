@@ -1,0 +1,4 @@
+kind: Feature
+body: Update opslevel self-hosted chart to remove all migrations init containers in
+  favor of /bin/run script
+time: 2024-12-06T12:13:18.357076-06:00

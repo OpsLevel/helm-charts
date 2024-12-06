@@ -1,0 +1,4 @@
+kind: Bugfix
+body: Fix opslevel self-hosted chart to properly account for external eq false and
+  create flags when generating secret resources
+time: 2024-12-06T12:12:38.726022-06:00
