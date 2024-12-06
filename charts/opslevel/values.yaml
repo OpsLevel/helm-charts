@@ -58,26 +58,14 @@ opslevel:
     resources: *resourcesMedium
   service:
     create: true
-    name: "opslevel" &opslevel_service_name
+    name: "opslevel"
     annotations: {}
   ingress:
     create: false
     name: opslevel
+    tls: false
     annotations: {}
     ingressClassName: ""
-    tls:
-      - hosts:
-        - opslevel.example.com
-    rules:
-      - host: opslevel.example.com
-        http:
-          paths:
-            - path: /
-              pathType: Prefix
-              backend:
-                service:
-                  <<: *opslevel_service_name
-                  port: http
   secret:
     name: "opslevel"
     create: true

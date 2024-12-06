@@ -36,11 +36,6 @@ spec:
         - name: opssight-web
           image: "{{ template "opssight.image" . }}"
           imagePullPolicy: IfNotPresent
-          env:
-            - name: DD_AGENT_HOST
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.hostIP
           envFrom:
             - configMapRef:
                 name: '{{ .Values.opssight.secret.name }}'

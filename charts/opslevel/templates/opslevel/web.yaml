@@ -41,8 +41,8 @@ spec:
             matchLabels:
               app.kuberntes.io/component: web
               app.kubernetes.io/part-of: opslevel
+      {{- if .Values.certificate.enabled }}
       initContainers:
-        {{- if .Values.certificate.enabled }}
         - name: init-certs
           image: "{{ template "opslevel.image" . }}"
           imagePullPolicy: IfNotPresent
@@ -58,16 +58,16 @@ spec:
             - name: ca
               mountPath: /data
               readOnly: false
-        {{- end }}
-        - name: migrations
+      {{- end }}
+      containers:
+        - name: web
           image: "{{ template "opslevel.image" . }}"
           imagePullPolicy: IfNotPresent
           args:
-            - bundle
-            - exec
-            - rake
-            - db:abort_if_pending_migrations
-          envFrom: &envFrom
+            - ./bin/run
+            - puma
+            - -C ./config/puma.rb
+          envFrom:
             - configMapRef:
                 name: 'opslevel'
             - secretRef:
@@ -75,25 +75,6 @@ spec:
             - secretRef:
                 name: '{{ .Values.redis.secret.name }}'
             {{- template "opslevel.integration.secrets" . }}
-          {{- if .Values.certificate.enabled }}
-          volumeMounts:
-            - name: certificate
-              mountPath: /usr/local/share/ca-certificates/custom-cert.crt
-              subPath: custom-cert.crt
-              readOnly: false
-            - name: ca
-              mountPath: /etc/ssl/certs
-          {{- end }}
-      containers:
-        - name: web
-          image: "{{ template "opslevel.image" . }}"
-          imagePullPolicy: IfNotPresent
-          args:
-            - bundle
-            - exec
-            - puma
-            - -C ./config/puma.rb
-          envFrom: *envFrom
           ports:
             - name: http
               containerPort: 3000

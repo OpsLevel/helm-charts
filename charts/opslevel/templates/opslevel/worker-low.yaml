@@ -33,8 +33,8 @@ spec:
       {{- template "global.nodeSelector" . }}
       priorityClassName: opslevel-normal
       terminationGracePeriodSeconds: 300
+      {{- if .Values.certificate.enabled }}
       initContainers:
-        {{- if .Values.certificate.enabled }}
         - name: init-certs
           image: "{{ template "opslevel.image" . }}"
           imagePullPolicy: IfNotPresent
@@ -50,15 +50,23 @@ spec:
             - name: ca
               mountPath: /data
               readOnly: false
-        {{- end }}
-        - name: migrations
+      {{- end }}
+      containers:
+        - name: low-priority
           image: "{{ template "opslevel.image" . }}"
+          imagePullPolicy: IfNotPresent
           args:
-            - bundle
-            - exec
-            - rake
-            - db:abort_if_pending_migrations
-          envFrom: &envFrom
+            - ./bin/run
+            - sidekiq
+            - --concurrency 5
+            - --timeout 290
+            - --queue checks_LOW,2
+            - --queue alert_sources_sync,1
+            - --queue documents,1
+            - --queue scheduler_LOW,1
+            - --queue integration_data_sync_LOW,1
+            - --queue default,1
+          envFrom:
             - configMapRef:
                 name: 'opslevel'
             - secretRef:
@@ -66,28 +74,6 @@ spec:
             - secretRef:
                 name: '{{ .Values.redis.secret.name }}'
             {{- template "opslevel.integration.secrets" . }}
-          {{- if .Values.certificate.enabled }}
-          volumeMounts:
-            - name: certificate
-              mountPath: /usr/local/share/ca-certificates/custom-cert.crt
-              subPath: custom-cert.crt
-              readOnly: false
-            - name: ca
-              mountPath: /etc/ssl/certs
-          {{- end }}
-      containers:
-        - name: low-priority
-          image: "{{ template "opslevel.image" . }}"
-          imagePullPolicy: IfNotPresent
-          args:
-            - bundle
-            - exec
-            - sidekiq
-            - -C ./config/low-priority-sidekiq.yml
-          env:
-            - name: SIDEKIQ_CONCURRENCY
-              value: "3"
-          envFrom: *envFrom
           {{- with .Values.opslevel.workerLow.resources }}
           resources:
             {{- toYaml . | nindent 12 }}

@@ -11,12 +11,20 @@ spec:
 {{- if .Values.opslevel.ingress.ingressClassName }}
   ingressClassName: {{ .Values.opslevel.ingress.ingressClassName}}
 {{- end }}
-{{- with .Values.opslevel.ingress.tls }}
+{{- if .Values.opslevel.ingress.tls }}
   tls:
-{{ toYaml . | indent 6 }}
+    - hosts:
+        - '{{ .Values.opslevel.subdomain }}.{{ .Values.opslevel.domain }}'
 {{- end }}
-{{- with .Values.opslevel.ingress.rules }}
   rules:
-{{ toYaml . | indent 6 }}
-{{- end }}
+    - host: '{{ .Values.opslevel.subdomain }}.{{ .Values.opslevel.domain }}'
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.opslevel.service.name }}
+                port:
+                  name: http
 {{- end }}

@@ -60,10 +60,6 @@ spec:
               value: "1"
             - name: SIDEKIQ_SCHEDULER
               value: "true"
-            - name: DD_AGENT_HOST
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.hostIP
           envFrom: &envFrom
             - configMapRef:
                 name: 'opslevel'
@@ -88,8 +84,7 @@ spec:
           image: "{{ template "opslevel.image" . }}"
           imagePullPolicy: IfNotPresent
           args:
-            - bundle
-            - exec
+            - ./bin/run
             - sidekiq
           envFrom: *envFrom
           env: *env

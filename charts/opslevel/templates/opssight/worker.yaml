@@ -39,12 +39,7 @@ spec:
           - sidekiq
           - -C
           - /opt/app/sidekiq.yml
-          env: &env
-          - name: DD_AGENT_HOST
-            valueFrom:
-              fieldRef:
-                fieldPath: status.hostIP
-          envFrom: &envFrom
+          envFrom:
           - configMapRef:
               name: '{{ .Values.opssight.secret.name }}'
           - secretRef:
