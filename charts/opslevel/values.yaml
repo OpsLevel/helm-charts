@@ -39,7 +39,7 @@ opslevel:
   forceSSL: false
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
-    tag: "selfhosted-prod-b95288af-1729030463"
+    tag: "selfhosted-prod-bacf4937-1733867911"
   account:
     name: "Main"
     username: "Alice Wonderland"
@@ -98,7 +98,7 @@ opssight:
   enabled: true
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opssight"
-    tag: "selfhosted-production-b8a797f-1726845192"
+    tag: "selfhosted-production-a224cac-1733235211"
   pod:
     annotations: {}
   web:
@@ -225,7 +225,7 @@ objectStorage:
 faktory:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/faktory"
-    tag: "1.9.0"
+    tag: "1.9.1"
   resources: *resourcesMedium
   storageClass: ""
   storageSize: "8Gi"
