@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.agent.name }}
+  {{- with .Values.agent.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.agent.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.agent.name }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.agent.name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      containers:
+        - name: main
+          image: "{{ template "agent.image" . }}"
+          imagePullPolicy: IfNotPresent
+          args:
+            - --config
+            - /app/config.yaml
+          envFrom:
+          - secretRef:
+              name: {{ .Values.secret.name }}
+              optional: true
+        {{- with .Values.agent.extra.containers }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: /app
+      volumes:
+        - name: config
+          configMap:
+            name: {{ .Values.configmap.name }}
+      {{- with .Values.agent.extra.spec }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

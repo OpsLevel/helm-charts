@@ -1,0 +1,82 @@
+serviceAccount:
+  create: true
+  name: opslevel-agent
+  labels: {}
+  annotations: {}
+  rules: # Depending on what resources you want the agent to synchronize you will have to adjust these permissions
+    - apiGroups:
+        - "v1"
+      resources:
+        - "Service"
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - "apps/v1"
+      resources:
+        - "Deployment"
+        - "StatefulSet"
+        - "DaemonSet"
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - "batch/v1"
+      resources:
+        - "CronJob"
+      verbs:
+        - get
+        - list
+        - watch
+    - apiGroups:
+        - "apiregistration.k8s.io/v1"
+      resources:
+        - "APIService"
+      verbs:
+        - get
+        - list
+        - watch
+
+# You can use this configmap to instruct the agent which resources to synchronize
+# only supports resources found in 'kubectl api-resources --verbs="get,list"'
+configmap:
+  create: true
+  name: opslevel-agent
+  labels: {}
+  annotations: {}
+  data:
+    config.yaml: |
+      selectors:
+      - apiVersion: "v1"
+        kind: Service
+      - apiVersion: "apps/v1"
+        kind: Deployment
+      - apiVersion: "apps/v1"
+        kind: StatefulSet
+      - apiVersion: "apps/v1"
+        kind: DaemonSet
+      - apiVersion: "batch/v1"
+        kind: CronJob
+      - apiVersion: "apiregistration.k8s.io/v1"
+        kind: APIService
+
+secret:
+  create: true
+  name: opslevel-agent
+  labels: {}
+  annotations: {}
+  data:
+    OPSLEVEL_API_TOKEN: ""
+
+agent:
+  name: opslevel-agent
+  image:
+    repository: "public.ecr.aws/opslevel/opslevel-agent"
+    tag: "v2024.11.22"
+  labels: {}
+  annotations: {}
+  extra:
+    spec: {}
+    containers: {}
