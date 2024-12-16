@@ -5,35 +5,35 @@ serviceAccount:
   annotations: {}
   rules: # Depending on what resources you want the agent to synchronize you will have to adjust these permissions
     - apiGroups:
-        - "v1"
+        - ""
       resources:
-        - "Service"
+        - "services"
       verbs:
         - get
         - list
         - watch
     - apiGroups:
-        - "apps/v1"
+        - "apps"
       resources:
-        - "Deployment"
-        - "StatefulSet"
-        - "DaemonSet"
+        - "deployments"
+        - "statefulsets"
+        - "daemonsets"
       verbs:
         - get
         - list
         - watch
     - apiGroups:
-        - "batch/v1"
+        - "batch"
       resources:
-        - "CronJob"
+        - "cronjobs"
       verbs:
         - get
         - list
         - watch
     - apiGroups:
-        - "apiregistration.k8s.io/v1"
+        - "apiregistration.k8s.io"
       resources:
-        - "APIService"
+        - "apiservices"
       verbs:
         - get
         - list
@@ -75,6 +75,7 @@ agent:
   image:
     repository: "public.ecr.aws/opslevel/opslevel-agent"
     tag: "v2024.11.22"
+  integration: "kubernetes"
   labels: {}
   annotations: {}
   extra:
