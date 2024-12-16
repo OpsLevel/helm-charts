@@ -28,6 +28,7 @@ spec:
 {{ toYaml . | indent 8 }}
 {{- end }}
     spec:
+      {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
       priorityClassName: opslevel-normal
       serviceAccountName: {{ .Values.runner.serviceAccount.name }}

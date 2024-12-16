@@ -1,0 +1,4 @@
+kind: Bugfix
+body: Fix runner deployments to have pull secret which is needed when adding a certificate
+  to the bundle
+time: 2024-12-16T10:39:06.800144-06:00
