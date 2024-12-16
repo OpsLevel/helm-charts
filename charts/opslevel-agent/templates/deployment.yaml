@@ -1,3 +1,4 @@
+{{- $token := .Values.agent.integration | required ".Values.agent.integration is required." -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,6 +34,8 @@ spec:
           args:
             - --config
             - /app/config.yaml
+            - --integration
+            - {{ .Values.agent.integration }}
           envFrom:
           - secretRef:
               name: {{ .Values.secret.name }}
