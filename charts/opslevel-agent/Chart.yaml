@@ -1,0 +1,13 @@
+apiVersion: "v2"
+name: "opslevel-agent"
+type: "application"
+version: "2024.12.12"
+appVersion: "2024.11.22"
+description: "The OpsLevel Kubernetes agent."
+home: "https://www.opslevel.com/"
+icon: "https://app.opslevel.com/OpsLevelLogo-Primary.svg"
+maintainers:
+  - name: "OpsLevel"
+    email: "support@opslevel.com"
+sources:
+  - "https://github.com/OpsLevel/opslevel-agent"
