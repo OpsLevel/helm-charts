@@ -104,8 +104,13 @@ spec:
                 command:
                   - sleep
                   - '30'
-          {{- if .Values.certificate.enabled }}
+
           volumeMounts:
+          {{- if .Values.opslevel.tls.enabled }}
+            - name: ssl
+              mountPath: /home/opslevel/config/ssl
+          {{- end }}
+          {{- if .Values.certificate.enabled }}
             - name: certificate
               mountPath: /usr/local/share/ca-certificates/custom-cert.crt
               subPath: custom-cert.crt
@@ -117,8 +122,14 @@ spec:
             - name: ca
               mountPath: /etc/ssl/certs
           {{- end }}
-      {{- if .Values.certificate }}
+
       volumes:
+      {{- if .Values.opslevel.tls.enabled }}
+        - name: ssl
+          secret:
+            secretName: '{{ .Values.opslevel.tls.secret.name}}'
+      {{- end }}
+      {{- if .Values.certificate }}
         - name: ca
           emptyDir: {}
         - name: certificate

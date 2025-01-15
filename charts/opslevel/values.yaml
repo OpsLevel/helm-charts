@@ -66,6 +66,14 @@ opslevel:
     tls: false
     annotations: {}
     ingressClassName: ""
+  tls:
+    enabled: false # If enabled ensure the ingress.tls is also enabled if using ingress
+    secret:
+      name: opslevel-tls
+      create: false
+      # if create == true then following keys are used as the contents for the mounted files
+      key: "" # The app expects a secret that gets mounted with the file tls.key
+      crt: "" # The app expects a secret that gets mounted with the file tls.crt
   secret:
     name: "opslevel"
     create: true
@@ -309,6 +317,8 @@ integrations:
       signingSecret: ""
       verificationToken: ""
 
+# This section is used to load a certificate into the ca trust stores
+# Its purpose for supporting https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.SSL.html
 certificate:
   enabled: false
   secret:
