@@ -99,6 +99,27 @@ entries:
     version: 0.0.1
   kubernetes-sync:
   - apiVersion: v2
+    appVersion: v2024.9.5
+    created: "2025-01-22T20:18:59.062270798Z"
+    description: An agent for synchronizing Kubernetes data with OpsLevel
+    digest: da3ef27e418e271e127c278b72fe7d102b407728d4617b2dcf8c01c96e966fa4
+    home: https://www.opslevel.com/
+    icon: https://app.opslevel.com/OpsLevelLogo-Primary.svg
+    keywords:
+    - monitoring
+    - alerting
+    - metric
+    maintainers:
+    - email: support@opslevel.com
+      name: OpsLevel
+    name: kubernetes-sync
+    sources:
+    - https://github.com/OpsLevel/kubectl-opslevel
+    type: application
+    urls:
+    - https://github.com/OpsLevel/helm-charts/releases/download/kubernetes-sync-0.8.0/kubernetes-sync-0.8.0.tgz
+    version: 0.8.0
+  - apiVersion: v2
     appVersion: v2024.5.1
     created: "2024-09-24T16:40:32.539102273Z"
     description: An agent for synchronizing Kubernetes data with OpsLevel
@@ -646,6 +667,26 @@ entries:
     version: 0.2.1
   opslevel:
   - apiVersion: v2
+    appVersion: 2024.12.10
+    created: "2025-01-22T20:18:59.184244561Z"
+    dependencies:
+    - name: replicated
+      repository: oci://registry.replicated.com/library
+      version: 1.0.0-beta.31
+    description: The OpsLevel internal developer portal helps your team ship fast
+      without risking your software standards.
+    digest: dd9a194dd563f61711175d2b0057fbe47780a8ad9b4e888f479a034140809bb0
+    home: https://www.opslevel.com/
+    icon: https://app.opslevel.com/OpsLevelLogo-Primary.svg
+    maintainers:
+    - email: support@opslevel.com
+      name: OpsLevel
+    name: opslevel
+    type: application
+    urls:
+    - https://github.com/OpsLevel/helm-charts/releases/download/opslevel-2024.12.11/opslevel-2024.12.11.tgz
+    version: 2024.12.11
+  - apiVersion: v2
     appVersion: 2024.9.16
     created: "2024-09-24T16:34:52.611788345Z"
     dependencies:
@@ -665,4 +706,4 @@ entries:
     urls:
     - https://github.com/OpsLevel/helm-charts/releases/download/opslevel-2024.9.16/opslevel-2024.9.16.tgz
     version: 2024.9.16
-generated: "2024-09-24T16:40:32.539329969Z"
+generated: "2025-01-22T20:18:59.184429555Z"
