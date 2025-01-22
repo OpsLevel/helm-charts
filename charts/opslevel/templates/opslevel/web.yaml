@@ -84,11 +84,15 @@ spec:
           {{- end }}
           readinessProbe:
             httpGet:
+              {{- if .Values.opslevel.tls.enabled }}
+              scheme: "HTTPS"
+              {{- end }}
               path: /api/health
               port: http
               httpHeaders:
                 - name: Host
                   value: '{{ .Values.opslevel.subdomain }}.{{ .Values.opslevel.domain }}'
+
             periodSeconds: 10
             successThreshold: 2
             failureThreshold: 3
