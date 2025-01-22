@@ -3,7 +3,7 @@ apitokenPath:
 apitokenSecret:
   name: opslevel-api-token
 
-image: public.ecr.aws/opslevel/kubectl-opslevel:v2024.5.1
+image: public.ecr.aws/opslevel/kubectl-opslevel:v2024.9.5
 
 sync:
   args:
