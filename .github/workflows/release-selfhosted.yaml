@@ -1,25 +1,25 @@
-name: Release Self-Hosted
-
-workflow_dispatch: {}
-
-jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      -
-        name: Fetch All Tags
-        run: git fetch --force --tags
-      -
-        name: Install Task
-        uses: arduino/setup-task@v2
-        with:
-          version: 3.x
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      -
-        name: Prepare Manifests
-        run: task release-self-hosted
+#name: Release Self-Hosted
+#
+#workflow_dispatch: {}
+#
+#jobs:
+#  release:
+#    runs-on: ubuntu-latest
+#    steps:
+#      -
+#        name: Checkout
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#      -
+#        name: Fetch All Tags
+#        run: git fetch --force --tags
+#      -
+#        name: Install Task
+#        uses: arduino/setup-task@v2
+#        with:
+#          version: 3.x
+#          repo-token: ${{ secrets.GITHUB_TOKEN }}
+#      -
+#        name: Prepare Manifests
+#        run: task release-self-hosted
