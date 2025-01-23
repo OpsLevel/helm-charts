@@ -667,6 +667,26 @@ entries:
     version: 0.2.1
   opslevel:
   - apiVersion: v2
+    appVersion: 2025.1.22
+    created: "2025-01-23T18:00:24.715005409Z"
+    dependencies:
+    - name: replicated
+      repository: oci://registry.replicated.com/library
+      version: 1.0.0-beta.31
+    description: The OpsLevel internal developer portal helps your team ship fast
+      without risking your software standards.
+    digest: 365ae5a3bc2ac98667c60e2ada254f9bd84f3e0d9dcae41d27d0451c13479d13
+    home: https://www.opslevel.com/
+    icon: https://app.opslevel.com/OpsLevelLogo-Primary.svg
+    maintainers:
+    - email: support@opslevel.com
+      name: OpsLevel
+    name: opslevel
+    type: application
+    urls:
+    - https://github.com/OpsLevel/helm-charts/releases/download/opslevel-2025.1.22/opslevel-2025.1.22.tgz
+    version: 2025.1.22
+  - apiVersion: v2
     appVersion: 2024.12.10
     created: "2025-01-22T20:18:59.184244561Z"
     dependencies:
@@ -706,4 +726,22 @@ entries:
     urls:
     - https://github.com/OpsLevel/helm-charts/releases/download/opslevel-2024.9.16/opslevel-2024.9.16.tgz
     version: 2024.9.16
-generated: "2025-01-22T20:18:59.184429555Z"
+  opslevel-agent:
+  - apiVersion: v2
+    appVersion: 2024.11.22
+    created: "2025-01-23T18:00:24.804101717Z"
+    description: The OpsLevel Kubernetes agent.
+    digest: a5e782a629369cef7b5ba5e403d948a4ac1874401865fefd1ca21852ed1e9214
+    home: https://www.opslevel.com/
+    icon: https://app.opslevel.com/OpsLevelLogo-Primary.svg
+    maintainers:
+    - email: support@opslevel.com
+      name: OpsLevel
+    name: opslevel-agent
+    sources:
+    - https://github.com/OpsLevel/opslevel-agent
+    type: application
+    urls:
+    - https://github.com/OpsLevel/helm-charts/releases/download/opslevel-agent-2024.12.12/opslevel-agent-2024.12.12.tgz
+    version: 2024.12.12
+generated: "2025-01-23T18:00:24.804201494Z"
