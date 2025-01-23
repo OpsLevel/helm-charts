@@ -8,7 +8,7 @@
 Official Helm charts for OpsLevel products. Currently supported:
 
 - [OpsLevel Self Hosted](https://github.com/OpsLevel/helm-charts/tree/main/charts/kubernetes-sync) (opslevel/opslevel) (requires license)
-- [OpsLevel Agent](https://github.com/OpsLevel/helm-charts/tree/main/charts/kubernetes-sync) (opslevel/opslevel-agent)
+- [OpsLevel Agent](https://github.com/OpsLevel/helm-charts/tree/main/charts/opslevel-agent) (opslevel/opslevel-agent)
 - [Gitlab Proxy](https://github.com/OpsLevel/helm-charts/tree/main/charts/gitlab-proxy) (opslevel/gitlab-proxy)
 
 ### End Of Life
