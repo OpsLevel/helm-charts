@@ -39,7 +39,7 @@ opslevel:
   forceSSL: false
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
-    tag: "selfhosted-prod-cc623e23-1737583171"
+    tag: "selfhosted-prod-e4ccf9b7-1741623148"
   account:
     name: "Main"
     username: "Alice Wonderland"
@@ -88,7 +88,7 @@ runner:
   enabled: false
   image:
     repository: "public.ecr.aws/opslevel/opslevel-runner"
-    tag: "v2024.10.14"
+    tag: "v2025.1.6"
   replicas: 3
   resources: *resourcesLarge
   serviceAccount:
@@ -106,7 +106,7 @@ opssight:
   enabled: true
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opssight"
-    tag: "selfhosted-production-788b9e0-1737573104"
+    tag: "selfhosted-production-7339203-1740584730"
   pod:
     annotations: {}
   web:
