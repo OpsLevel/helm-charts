@@ -3,6 +3,8 @@ apiVersion: elasticsearch.k8s.elastic.co/v1
 kind: Elasticsearch
 metadata:
   name: elasticsearch
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
 spec:
   version: '{{ .Values.elasticsearch.image.tag }}'
   nodeSets:
