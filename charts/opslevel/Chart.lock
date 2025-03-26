@@ -2,5 +2,8 @@ dependencies:
 - name: replicated
   repository: oci://registry.replicated.com/library
   version: 1.0.0-beta.31
-digest: sha256:6d6190e56b76a579495d63a8d757870ddb449edb0ed239b1afe33a6ea363883b
-generated: "2024-12-06T12:07:52.829619-06:00"
+- name: eck-operator
+  repository: https://helm.elastic.co/
+  version: 2.14.0
+digest: sha256:eab665bb686dccb5ebccb092a5b185e1d659c54b3ec10dd2bed1dad34213325c
+generated: "2025-03-26T09:42:05.688423-05:00"
