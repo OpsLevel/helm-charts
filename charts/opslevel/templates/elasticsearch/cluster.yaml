@@ -1,0 +1,46 @@
+{{- if eq .Values.elasticsearch.external false }}
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: elasticsearch
+spec:
+  version: '{{ .Values.elasticsearch.image.tag }}'
+  nodeSets:
+    - name: elasticsearch
+      image: '{{ template "elasticsearch.image" . }}'
+      count: 2
+      config:
+       node.store.allow_mmap: false
+      podTemplate:
+        spec:
+          {{- template "opslevel.pullSecrets" . }}
+          {{- template "global.nodeSelector" . }}
+          {{- with .Values.elasticsearch.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          priorityClassName: opslevel-high
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data # Do not change this name unless you set up a volume mount for the data path.
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            {{- if .Values.elasticsearch.storageClass }}
+            storageClassName: '{{ .Values.elasticsearch.storageClass }}'
+            {{- end }}
+            resources:
+              requests:
+                storage: '{{ .Values.elasticsearch.storageSize }}'
+  podDisruptionBudget:
+    spec:
+      minAvailable: 1
+      selector:
+        matchLabels:
+          elasticsearch.k8s.elastic.co/cluster-name: elasticsearch
+  serviceAccountName: "{{ .Values.elasticsearch.serviceAccount.name }}"
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+{{- end }}
