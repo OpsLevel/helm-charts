@@ -155,6 +155,8 @@ postgres:
     create: true
     name: postgres
     annotations: {}
+  securityContext:
+    fsGroup: 1001
   storageClass: ""
   storageSize: "10Gi"
   secret:
@@ -195,6 +197,8 @@ elasticsearch:
     create: true
     name: elasticsearch
     annotations: {}
+  securityContext:
+    fsGroup: 0
   storageClass: ""
   storageSize: "8Gi"
   secret:
