@@ -31,6 +31,10 @@ spec:
       terminationGracePeriodSeconds: 10
       shareProcessNamespace: true
       priorityClassName: opslevel-critical
+      {{- with .Values.faktory.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: server
           image: {{ template "faktory.image" . }}
