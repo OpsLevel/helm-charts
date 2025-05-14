@@ -32,6 +32,10 @@ spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
       priorityClassName: opslevel-normal
+      {{- with .Values.opslevel.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       terminationGracePeriodSeconds: 120
       topologySpreadConstraints:
         - maxSkew: 1

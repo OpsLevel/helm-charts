@@ -27,6 +27,10 @@ spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
       priorityClassName: opslevel-high
+      {{- with .Values.objectStorage.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: "{{ .Values.objectStorage.serviceAccount.name }}"
       subdomain: minio
       containers:

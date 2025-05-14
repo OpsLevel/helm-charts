@@ -31,6 +31,10 @@ spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
       priorityClassName: opslevel-normal
+      {{- with .Values.runner.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ .Values.runner.serviceAccount.name }}
       {{- if .Values.certificate.enabled }}
       initContainers:

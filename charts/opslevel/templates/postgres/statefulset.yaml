@@ -32,8 +32,10 @@ spec:
       {{- template "global.nodeSelector" . }}
       serviceAccountName: "{{ .Values.postgres.serviceAccount.name }}"
       priorityClassName: opslevel-high
+      {{- with .Values.postgres.securityContext }}
       securityContext:
-        fsGroup: 1001
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       hostNetwork: false
       hostIPC: false
       containers:

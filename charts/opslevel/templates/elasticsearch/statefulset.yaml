@@ -28,8 +28,10 @@ spec:
       {{- template "global.nodeSelector" . }}
       serviceAccountName: "{{ .Values.elasticsearch.serviceAccount.name }}"
       priorityClassName: opslevel-high
+      {{- with .Values.elasticsearch.securityContext }}
       securityContext:
-        fsGroup: 0
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       subdomain: elasticsearch
       containers:
         - name: elasticsearch

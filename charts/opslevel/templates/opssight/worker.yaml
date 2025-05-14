@@ -29,6 +29,10 @@ spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
       priorityClassName: opslevel-normal
+      {{- with .Values.opssight.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       terminationGracePeriodSeconds: 315
       containers:
         - name: opssight-worker

@@ -66,6 +66,7 @@ opslevel:
     tls: false
     annotations: {}
     ingressClassName: ""
+  securityContext: {}
   tls:
     enabled: false # If enabled ensure the ingress.tls is also enabled if using ingress
     secret:
@@ -95,6 +96,7 @@ runner:
     create: true
     name: opslevel-runner
     annotations: {}
+  securityContext: {}
   pod:
     annotations: {}
   secret:
@@ -115,6 +117,7 @@ opssight:
   worker:
     replicas: 1
     resources: *resourcesSmall
+  securityContext: {}
   secret:
     name: "opssight"
     create: true
@@ -132,6 +135,7 @@ mysql:
     create: true
     name: mysql
     annotations: {}
+  securityContext: {}
   storageClass: ""
   storageSize: "10Gi"
   secret:
@@ -155,6 +159,8 @@ postgres:
     create: true
     name: postgres
     annotations: {}
+  securityContext:
+    fsGroup: 1001
   storageClass: ""
   storageSize: "10Gi"
   secret:
@@ -174,6 +180,7 @@ redis:
   resources: *resourcesMedium
   pod:
     annotations: {}
+  securityContext: {}
   secret:
     create: true
     name: "opslevel-redis"
@@ -195,6 +202,8 @@ elasticsearch:
     create: true
     name: elasticsearch
     annotations: {}
+  securityContext:
+    fsGroup: 0
   storageClass: ""
   storageSize: "8Gi"
   secret:
@@ -220,6 +229,7 @@ objectStorage:
     create: true
     name: minio
     annotations: {}
+  securityContext: {}
   storageClass: ""
   storageSize: "8Gi"
   secret:
@@ -235,6 +245,7 @@ faktory:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/faktory"
     tag: "1.9.1"
   resources: *resourcesMedium
+  securityContext: {}
   storageClass: ""
   storageSize: "8Gi"
   pod:

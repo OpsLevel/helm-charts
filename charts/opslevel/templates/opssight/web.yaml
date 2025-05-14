@@ -33,6 +33,10 @@ spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
       priorityClassName: opslevel-normal
+      {{- with .Values.opssight.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: opssight-web
           image: "{{ template "opssight.image" . }}"
