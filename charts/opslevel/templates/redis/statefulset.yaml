@@ -40,15 +40,10 @@ spec:
         - name: redis
           image: {{ template "redis.image" . }}
           imagePullPolicy: IfNotPresent
+          {{- with .Values.redis.pod.securityContext }}
           securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            seccompProfile:
-              type: RuntimeDefault
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
             - containerPort: 6379
           {{- with .Values.redis.resources }}
