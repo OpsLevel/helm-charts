@@ -31,7 +31,7 @@ spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
       serviceAccountName: "{{ .Values.mysql.serviceAccount.name }}"
-      priorityClassName: opslevel-critical
+      priorityClassName: {{ .Values.priorityClasses.critical }}
       {{- with .Values.mysql.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}

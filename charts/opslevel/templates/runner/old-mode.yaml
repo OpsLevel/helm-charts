@@ -30,7 +30,7 @@ spec:
     spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
-      priorityClassName: opslevel-normal
+      priorityClassName: {{ .Values.priorityClasses.normal }}
       {{- with .Values.runner.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}

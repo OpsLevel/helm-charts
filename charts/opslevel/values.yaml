@@ -338,3 +338,8 @@ certificate:
     crt: ""
     key: ""
 
+priorityClasses:
+  create: true
+  critical: "opslevel-critical"
+  high: "opslevel-high"
+  normal: "opslevel-normal"

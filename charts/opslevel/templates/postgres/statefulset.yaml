@@ -31,7 +31,7 @@ spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
       serviceAccountName: "{{ .Values.postgres.serviceAccount.name }}"
-      priorityClassName: opslevel-high
+      priorityClassName: {{ .Values.priorityClasses.high }}
       {{- with .Values.postgres.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}

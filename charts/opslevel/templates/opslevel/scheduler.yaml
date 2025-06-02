@@ -31,7 +31,7 @@ spec:
     spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
-      priorityClassName: opslevel-normal
+      priorityClassName: {{ .Values.priorityClasses.normal }}
       terminationGracePeriodSeconds: 300
       initContainers:
         {{- if .Values.certificate.enabled }}

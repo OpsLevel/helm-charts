@@ -27,7 +27,7 @@ spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
       serviceAccountName: "{{ .Values.elasticsearch.serviceAccount.name }}"
-      priorityClassName: opslevel-high
+      priorityClassName: {{ .Values.priorityClasses.high }}
       {{- with .Values.elasticsearch.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
