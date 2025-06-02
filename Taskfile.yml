@@ -22,6 +22,26 @@ tasks:
       - task: setup
       - task: lint-self-hosted
 
+  internal-release:
+    desc: Workflow that releases the self-hosted helm chart for internal use
+    deps:
+      - setup
+    cmds:
+      - task: package-self-hosted
+      - task: lint-self-hosted
+      - task: publish-self-hosted
+        vars: { REPLICATED_CHANNEL: 'Helm-Unstable' }
+
+  public-release:
+    desc: Workflow that releases the self-hosted helm chart to customers
+    deps:
+      - setup
+    cmds:
+      - task: package-self-hosted
+      - task: lint-self-hosted
+      - task: publish-self-hosted
+        vars: { REPLICATED_CHANNEL: 'Helm' }
+
   release-self-hosted:
     desc: Workflow that packages, lints and releases the self-hosted helm chart
     deps:
