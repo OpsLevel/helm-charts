@@ -1,4 +1,4 @@
-{{- if eq .Values.priorityClasses.create false }}
+{{- if eq .Values.priorityClasses.create true }}
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
