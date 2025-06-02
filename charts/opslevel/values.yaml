@@ -180,7 +180,16 @@ redis:
   resources: *resourcesMedium
   pod:
     annotations: {}
-  securityContext: {}
+  serviceAccount:
+    create: true
+    name: redis
+    annotations: {}
+  securityContext:
+    fsGroupChangePolicy: Always
+    supplementalGroups: []
+    sysctls: []
+  storageClass: ""
+  storageSize: "8Gi"
   secret:
     create: true
     name: "opslevel-redis"
