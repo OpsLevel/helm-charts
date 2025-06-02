@@ -1,4 +1,4 @@
-{{ if .Values.priorityClasses.create }}
+{{- if eq .Values.priorityClasses.create false }}
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
@@ -22,4 +22,4 @@ metadata:
 value: 100
 globalDefault: false
 description: "This priority class will be used for all other self-hosted workloads."
-{{ end }}
+{{- end }}
