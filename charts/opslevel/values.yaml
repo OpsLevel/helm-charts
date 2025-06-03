@@ -108,7 +108,7 @@ opssight:
   enabled: true
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opssight"
-    tag: "selfhosted-production-e228884-1748962606"
+    tag: "selfhosted-production-25ac924-1748970309"
   pod:
     annotations: {}
   web:
