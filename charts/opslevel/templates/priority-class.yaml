@@ -1,7 +1,8 @@
+{{- if eq .Values.priorityClasses.create true }}
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
-  name: opslevel-critical
+  name: {{ .Values.priorityClasses.critical }}
 value: 1000000
 globalDefault: false
 description: "This priority class will be used to ensure opslevel mysql pod preempts other self-hosted workloads."
@@ -9,7 +10,7 @@ description: "This priority class will be used to ensure opslevel mysql pod pree
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
-  name: opslevel-high
+  name: {{ .Values.priorityClasses.high }}
 value: 10000
 globalDefault: false
 description: "This priority class will be used for statefulsets to ensure they preempts other self-hosted workloads."
@@ -17,7 +18,8 @@ description: "This priority class will be used for statefulsets to ensure they p
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
-  name: opslevel-normal
+  name: {{ .Values.priorityClasses.normal }}
 value: 100
 globalDefault: false
 description: "This priority class will be used for all other self-hosted workloads."
+{{- end }}

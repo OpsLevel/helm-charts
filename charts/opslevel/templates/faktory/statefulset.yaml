@@ -30,7 +30,7 @@ spec:
       {{- template "global.nodeSelector" . }}
       terminationGracePeriodSeconds: 10
       shareProcessNamespace: true
-      priorityClassName: opslevel-critical
+      priorityClassName: {{ .Values.priorityClasses.critical }}
       {{- with .Values.faktory.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}

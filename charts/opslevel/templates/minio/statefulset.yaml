@@ -26,7 +26,7 @@ spec:
     spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
-      priorityClassName: opslevel-high
+      priorityClassName: {{ .Values.priorityClasses.high }}
       {{- with .Values.objectStorage.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
