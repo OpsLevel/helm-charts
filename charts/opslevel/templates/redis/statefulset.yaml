@@ -1,6 +1,6 @@
 {{- if eq .Values.redis.external false }}
-apiVersion: apps/v1  # API version
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: redis
   labels:
@@ -8,13 +8,14 @@ metadata:
     app.kubernetes.io/part-of: redis
 spec:
   replicas: 1
-  strategy:
-    type: Recreate
+  serviceName: redis
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app.kubernetes.io/component: app
       app.kubernetes.io/part-of: redis
-  revisionHistoryLimit: 3
+  updateStrategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -28,19 +29,46 @@ spec:
     spec:
       {{- template "opslevel.pullSecrets" . }}
       {{- template "global.nodeSelector" . }}
-      priorityClassName: {{ .Values.priorityClasses.normal }}
+      serviceAccountName: "{{ .Values.redis.serviceAccount.name }}"
+      priorityClassName: {{ .Values.priorityClasses.high }}
       {{- with .Values.redis.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      subdomain: redis
       containers:
-        - name: master
+        - name: redis
           image: {{ template "redis.image" . }}
           imagePullPolicy: IfNotPresent
+          {{- with .Values.redis.pod.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
-          - containerPort: 6379
+            - containerPort: 6379
           {{- with .Values.redis.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+      {{- if .Values.redis.storageClass }}
+        storageClassName: '{{ .Values.redis.storageClass }}'
+      {{- end }}
+        resources:
+          requests:
+            storage: '{{ .Values.redis.storageSize }}'
 {{- end }}
