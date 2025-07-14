@@ -40,6 +40,7 @@ data:
   OPSLEVEL_SUBDOMAIN: '{{ default "app" .Values.opslevel.subdomain }}'
   OPSSIGHT_BASE_URL: 'http://opssight:3000/'
   PROXY_PROTOCOL: 'https'
+  PUBLIC_IMAGE_BASE_PATH: '{{ .Values.runner.job_image.repository }}'
   RACK_TIMEOUT_SERVICE_TIMEOUT: '35'
   RACK_TIMEOUT_WAIT_TIMEOUT: '35'
   RAILS_LOG_TO_STDOUT: 'enabled'

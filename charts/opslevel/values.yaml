@@ -90,6 +90,8 @@ runner:
   image:
     repository: "public.ecr.aws/opslevel/opslevel-runner"
     tag: "v2025.1.6"
+  job_image:
+    repository: "public.ecr.aws/opslevel"
   replicas: 3
   resources: *resourcesLarge
   serviceAccount:
