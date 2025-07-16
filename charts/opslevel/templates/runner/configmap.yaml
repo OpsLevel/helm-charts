@@ -1,0 +1,14 @@
+{{- if .Values.runner.enabled }}
+{{- if .Values.runner.config.create }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: '{{ .Values.runner.config.name }}'
+  labels:
+    app.kubernetes.io/component: configmap
+    app.kubernetes.io/part-of: runner
+data:
+  opslevel.yaml: |
+{{ .Values.runner.config.settings | indent 4 }}
+{{- end }}
+{{- end }}

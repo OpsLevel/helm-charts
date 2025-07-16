@@ -60,6 +60,9 @@ spec:
           imagePullPolicy: IfNotPresent
           args:
             - run
+            {{- if .Values.runner.config.create }}
+            - --config=/opslevel/opslevel.yaml
+            {{- end }}
             - --api-url=http://$(OPSLEVEL_SERVICE_HOST):$(OPSLEVEL_SERVICE_PORT_HTTP)
             - --job-pod-namespace={{ .Release.Namespace }}
             - --job-pod-max-wait=300
@@ -86,21 +89,34 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if .Values.certificate.enabled }}
+          {{- if or .Values.certificate.enabled .Values.runner.config.create }}
           volumeMounts:
+            {{- if .Values.certificate.enabled }}
             - name: certificate
               mountPath: /usr/local/share/ca-certificates/custom-cert.crt
               subPath: custom-cert.crt
               readOnly: false
             - name: ca
               mountPath: /etc/ssl/certs
+            {{- end }}
+            {{- if .Values.runner.config.create }}
+            - name: settings
+              mountPath: /opslevel/
+            {{- end }}
           {{- end }}
-      {{- if .Values.certificate.enabled }}
+      {{- if or .Values.certificate.enabled .Values.runner.config.create }}
       volumes:
+        {{- if .Values.certificate.enabled }}
         - name: ca
           emptyDir: {}
         - name: certificate
           secret:
             secretName: {{ .Values.certificate.secret.name }}
+        {{- end }}
+        {{- if .Values.runner.config.create}}
+        - name: settings
+          configMap:
+            name: {{ .Values.runner.config.name }}
+        {{- end }}
       {{- end }}
 {{- end }}

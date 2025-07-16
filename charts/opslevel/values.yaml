@@ -39,7 +39,7 @@ opslevel:
   forceSSL: false
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
-    tag: "selfhosted-prod-83b5a8e3-1747931603"
+    tag: "selfhosted-prod-92f12c31-1752678698"
   account:
     name: "Main"
     username: "Alice Wonderland"
@@ -89,7 +89,7 @@ runner:
   enabled: false
   image:
     repository: "public.ecr.aws/opslevel/opslevel-runner"
-    tag: "v2025.1.6"
+    tag: "v2025.7.16"
   job_image:
     repository: "public.ecr.aws/opslevel"
   replicas: 3
@@ -105,6 +105,16 @@ runner:
     name: "opslevel-runner"
     create: true
     token: ""
+  config:
+    name: "opslevel-runner"
+    create: false
+    settings: | # use this to override the pod configuration the runner uses to spin up jobs
+#      kubernetes:
+#        annotations:
+#          podpreset.admission.kubernetes.io/allow-database: "resource version"
+#        serviceAccount: "opslevel-runner-jobs"
+#        securityContext:
+#          runAsUser: 1000
 
 opssight:
   enabled: true
