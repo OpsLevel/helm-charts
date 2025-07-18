@@ -1,0 +1,3 @@
+kind: Feature
+body: Add ability to override the opslevel-runner job pod settings such as securityContext, nodeSelector, serviceAccount, etc
+time: 2025-07-18T09:28:05.764173-04:00
