@@ -28,6 +28,10 @@ jobs:
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      -
+        name: Remove Self Hosted
+        run: |
+          rm -rf ./charts/opslevel
       - 
         name: Install Helm
         uses: azure/setup-helm@v4
