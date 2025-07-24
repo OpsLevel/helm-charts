@@ -72,7 +72,7 @@ agent:
   name: opslevel-agent
   image:
     repository: "public.ecr.aws/opslevel/opslevel-agent"
-    tag: "v2024.11.22"
+    tag: "v2025.7.23"
   integration: "kubernetes"
   labels: {}
   annotations: {}
