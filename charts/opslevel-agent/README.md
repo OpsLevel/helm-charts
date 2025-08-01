@@ -41,14 +41,14 @@ Opslevel has added a [new integration type](https://docs.opslevel.com/docs/mappi
 
 > You will need opslevel-agent version v2025.7.23 or newer
 
-To configuration the agent to send payloads at this integration:
+To configure the agent to send payloads at this integration in your `values.yaml` you would do:
 
 ```yaml
 agent:
   integration: "https://app.opslevel.com/integrations/custom/webhook/XXXXXXXXXXXXXXXXXXXXXXX"
 ```
 
-Then on the integration you can add extrators and transformers like this
+Then on the integration settings in OpsLevel you can add extrators and transformers like this to map data
 
 ```yaml
 ---
@@ -89,6 +89,8 @@ transforms:
     containers: ".spec.template.spec | .containers + .initContainers | map(.image)"
     service: .metadata.annotations."opslevel.com/service" // (.metadata.namespace + "-service")
 ```
+
+> Note: this maps deployments and statefulsets to a new "runtime" component defined by you
 
 Read our [integration documentation](https://docs.opslevel.com/docs/mapping-integration-data-to-custom-properties#configuration) for further information on whats possible in these configuration settings.
 
