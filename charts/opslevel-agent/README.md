@@ -39,6 +39,8 @@ agent:
 
 Opslevel has added a [new integration type](https://docs.opslevel.com/docs/mapping-integration-data-to-custom-properties) that allows for mapping properties and relationships to components (and it supports suggestions)
 
+> You will need opslevel-agent version v2025.7.23 or newer
+
 To configuration the agent to send payloads at this integration:
 
 ```yaml
