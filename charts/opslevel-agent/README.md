@@ -35,6 +35,67 @@ agent:
   integration: "prod-cluster"
 ```
 
+## Custom Data Mapping
+
+Opslevel has added a [new integration type](https://docs.opslevel.com/docs/mapping-integration-data-to-custom-properties) that allows for mapping properties and relationships to components (and it supports suggestions)
+
+To configuration the agent to send payloads at this integration:
+
+```yaml
+agent:
+  integration: "https://app.opslevel.com/integrations/custom/webhook/XXXXXXXXXXXXXXXXXXXXXXX"
+```
+
+Then on the integration you can add extrators and transformers like this
+
+```yaml
+---
+extractors:
+- external_kind: apps_v1_Deployment
+  external_id: ".metadata.uid"
+  exclude: .metadata.namespace == "kube-system"
+- external_kind: apps_v1_StatefulSet
+  external_id: ".metadata.uid"
+  exclude: .metadata.namespace == "kube-system"
+- external_kind: v1_Namespace
+  external_id: ".metadata.uid"
+```
+
+and
+
+```
+---
+transforms:
+- external_kind: v1_Namespace
+  opslevel_kind: service
+  opslevel_identifier: .metadata.name + "-service"
+  on_component_not_found: suggest
+- external_kind: apps_v1_Deployment
+  opslevel_kind: runtime
+  opslevel_identifier: ".metadata.name"
+  on_component_not_found: suggest
+  properties:
+    namespace: ".metadata.namespace"
+    containers: ".spec.template.spec | .containers + .initContainers | map(.image)"
+    service: .metadata.annotations."opslevel.com/service" // (.metadata.namespace + "-service")
+- external_kind: apps_v1_StatefulSet
+  opslevel_kind: runtime
+  opslevel_identifier: ".metadata.name"
+  on_component_not_found: suggest
+  properties:
+    namespace: ".metadata.namespace"
+    containers: ".spec.template.spec | .containers + .initContainers | map(.image)"
+    service: .metadata.annotations."opslevel.com/service" // (.metadata.namespace + "-service")
+```
+
+Read our [integration documentation](https://docs.opslevel.com/docs/mapping-integration-data-to-custom-properties#configuration) for further information on whats possible in these configuration settings.
+
+A handy tip for playing around with the mappings you can use the "Test Configuration" section by copying a kubernetes resource data to the sample payload using this simple command
+
+```bash
+kubectl get deployment <deployment_name> -o json | pbcopy
+```
+
 ## Resource Targeting
 
 By default the agent will target the following resources:
