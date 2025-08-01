@@ -63,7 +63,7 @@ extractors:
 
 and
 
-```
+```yaml
 ---
 transforms:
 - external_kind: v1_Namespace
