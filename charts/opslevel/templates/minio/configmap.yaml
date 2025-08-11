@@ -11,10 +11,10 @@ data:
     #! /usr/bin/env bash
     trap "echo [opslevel] Terminated TERM; exit" SIGTERM
     while true; do
-      mc config host add opslevel http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}
-      mc ready opslevel
-      mc mb --ignore-existing opslevel/${MINIO_BUCKET_NAME}
-      mc anonymous set public opslevel/${MINIO_BUCKET_NAME}
+      mc --config-dir /config config host add opslevel http://minio.{{ .Release.Namespace }}.svc.cluster.local:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}
+      mc --config-dir /config ready opslevel
+      mc --config-dir /config mb --ignore-existing opslevel/${MINIO_BUCKET_NAME}
+      mc --config-dir /config anonymous set public opslevel/${MINIO_BUCKET_NAME}
       sleep 600 &
       wait $!
     done;
