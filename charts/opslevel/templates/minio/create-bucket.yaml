@@ -33,9 +33,13 @@ spec:
         volumeMounts:
           - name: scripts
             mountPath: /opslevel
+          - name: config
+            mountPath: /opslevel_config
       volumes:
         - name: scripts
           configMap:
             name: minio
             defaultMode: 0777
+        - name: config
+          emptyDir: {}
 {{- end }}
