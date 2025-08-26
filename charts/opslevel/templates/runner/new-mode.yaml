@@ -63,6 +63,7 @@ spec:
             {{- if .Values.runner.config.create }}
             - --config=/opslevel/opslevel.yaml
             {{- end }}
+            - --api-url=http://$(OPSLEVEL_SERVICE_HOST):$(OPSLEVEL_SERVICE_PORT_HTTP)
             - --mode=faktory
             - --queues=runner
             - --job-pod-namespace={{ .Release.Namespace }}
