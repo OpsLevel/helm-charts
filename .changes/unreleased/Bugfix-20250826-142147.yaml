@@ -1,0 +1,3 @@
+kind: Bugfix
+body: Fix bug where faktory runner was not talking to the correct instance of opslevel for client startup validation
+time: 2025-08-26T14:21:47.220693-04:00
