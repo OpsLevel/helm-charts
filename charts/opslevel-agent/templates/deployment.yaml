@@ -43,13 +43,17 @@ spec:
         {{- with .Values.agent.extra.containers }}
           {{- toYaml . | nindent 10 }}
         {{- end }}
+        {{- if .Values.configmap.create }}
           volumeMounts:
             - name: config
               mountPath: /app
+        {{- end }}
+      {{- if .Values.configmap.create }}
       volumes:
         - name: config
           configMap:
             name: {{ .Values.configmap.name }}
+      {{- end }}
       {{- with .Values.agent.extra.spec }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
