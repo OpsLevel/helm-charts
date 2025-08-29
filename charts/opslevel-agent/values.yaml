@@ -42,7 +42,7 @@ serviceAccount:
 # You can use this configmap to instruct the agent which resources to synchronize
 # only supports resources found in 'kubectl api-resources --verbs="get,list"'
 configmap:
-  create: true
+  create: false
   name: opslevel-agent
   labels: {}
   annotations: {}
@@ -50,13 +50,17 @@ configmap:
     config.yaml: |
       selectors:
       - apiVersion: "v1"
-        kind: Service
+        kind: Namespace
       - apiVersion: "apps/v1"
         kind: Deployment
       - apiVersion: "apps/v1"
         kind: StatefulSet
       - apiVersion: "apps/v1"
         kind: DaemonSet
+      - apiVersion: "networking.k8s.io/v1"
+        kind: Ingress
+      - apiVersion: "v1"
+        kind: Service
       - apiVersion: "batch/v1"
         kind: CronJob
 
@@ -72,7 +76,7 @@ agent:
   name: opslevel-agent
   image:
     repository: "public.ecr.aws/opslevel/opslevel-agent"
-    tag: "v2025.7.23"
+    tag: "v2025.8.29"
   integration: "kubernetes"
   labels: {}
   annotations: {}
