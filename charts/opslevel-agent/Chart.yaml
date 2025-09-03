@@ -1,7 +1,7 @@
 apiVersion: "v2"
 name: "opslevel-agent"
 type: "application"
-version: "2025.8.30"
+version: "2025.8.31"
 appVersion: "2025.8.29"
 description: "The OpsLevel Kubernetes agent."
 home: "https://www.opslevel.com/"
