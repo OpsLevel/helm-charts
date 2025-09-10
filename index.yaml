@@ -728,6 +728,23 @@ entries:
     version: 2024.9.16
   opslevel-agent:
   - apiVersion: v2
+    appVersion: 2025.9.10
+    created: "2025-09-10T15:51:57.915490766Z"
+    description: The OpsLevel Kubernetes agent.
+    digest: 5530ee3020e1172611469ba38c7da3bf5fef22c710d60b204f9ab5fc003cb15d
+    home: https://www.opslevel.com/
+    icon: https://app.opslevel.com/OpsLevelLogo-Primary.svg
+    maintainers:
+    - email: support@opslevel.com
+      name: OpsLevel
+    name: opslevel-agent
+    sources:
+    - https://github.com/OpsLevel/opslevel-agent
+    type: application
+    urls:
+    - https://github.com/OpsLevel/helm-charts/releases/download/opslevel-agent-2025.9.10/opslevel-agent-2025.9.10.tgz
+    version: 2025.9.10
+  - apiVersion: v2
     appVersion: 2025.8.29
     created: "2025-08-29T16:57:13.738859418Z"
     description: The OpsLevel Kubernetes agent.
@@ -795,4 +812,4 @@ entries:
     urls:
     - https://github.com/OpsLevel/helm-charts/releases/download/opslevel-agent-2024.12.12/opslevel-agent-2024.12.12.tgz
     version: 2024.12.12
-generated: "2025-08-29T16:57:13.738972861Z"
+generated: "2025-09-10T15:51:57.915589742Z"
