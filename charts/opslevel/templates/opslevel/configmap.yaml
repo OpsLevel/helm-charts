@@ -34,6 +34,7 @@ data:
   MAIL_DOMAIN: '{{ default .Values.opslevel.domain .Values.smtp.secret.emailDomain }}'
   MAIL_SENDER_NAME: '{{ default "" .Values.smtp.secret.emailDisplayName }}'
   MAIL_USERNAME: '{{ default "" .Values.smtp.secret.emailUsername }}'
+  MAX_WEBHOOK_PAYLOAD_SIZE: '{{ default "0" .Values.opslevel.web.maxWebhookPayloadSize }}'
   OPSGENIE_ENABLED: 'true'
   OPSLEVEL_ENV: '{{ default "on-prem" (((.Values.global.replicated).licenseFields).opslevel_env).value }}'
   OPSLEVEL_DOMAIN: '{{ default "example.com" .Values.opslevel.domain }}'

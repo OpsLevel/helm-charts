@@ -50,6 +50,8 @@ opslevel:
   web:
     replicas: 3
     resources: *resourcesMedium
+    # limits webhook payload size accepted by Rails (bytes)
+    maxWebhookPayloadSize: 0
   workerHigh:
     replicas: 2
     resources: *resourcesSmall
