@@ -311,6 +311,7 @@ integrations:
       name: "opslevel-aws-int"
       accessKey: ""
       secretKey: ""
+      useIRSA: false
   azureDevOps: # Docs:
     enabled: false
     secret:
