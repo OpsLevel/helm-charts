@@ -1,8 +1,8 @@
 apiVersion: "v2"
 name: "opslevel"
 type: "application"
-version: "2025.9.29"
-appVersion: "2025.9.29"
+version: "2025.10.18"
+appVersion: "2025.10.18"
 description: "The OpsLevel internal developer portal helps your team ship fast without risking your software standards."
 home: "https://www.opslevel.com/"
 icon: "https://app.opslevel.com/OpsLevelLogo-Primary.svg"
@@ -10,10 +10,10 @@ maintainers:
   - name: "OpsLevel"
     email: "support@opslevel.com"
 dependencies:
-  - name: 'replicated'
-    repository: 'oci://registry.replicated.com/library'
-    version: '1.5.3'
-  - name: 'eck-operator'
-    version: '2.16.1'
-    repository: 'https://helm.elastic.co/'
+  - name: "replicated"
+    repository: "oci://registry.replicated.com/library"
+    version: "1.5.3"
+  - name: "eck-operator"
+    version: "2.16.1"
+    repository: "https://helm.elastic.co/"
     condition: elasticsearch.eck.enabled
