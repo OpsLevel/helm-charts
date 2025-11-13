@@ -39,7 +39,7 @@ opslevel:
   forceSSL: false
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
-    tag: "selfhosted-prod-0b388460-1760708035"
+    tag: "selfhosted-prod-76c65efc-1762967475"
   account:
     name: "Main"
     username: "Alice Wonderland"
