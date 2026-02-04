@@ -1,0 +1,3 @@
+kind: Feature
+body: 'Bump default opslevel.workerHigh.resources from small (200m CPU / 500Mi memory requests) to medium (1 CPU / 2Gi memory requests) '
+time: 2026-02-04T11:08:59.849632-08:00

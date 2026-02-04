@@ -54,7 +54,7 @@ opslevel:
     maxWebhookPayloadSize: 0
   workerHigh:
     replicas: 2
-    resources: *resourcesSmall
+    resources: *resourcesMedium
   workerLow:
     replicas: 2
     resources: *resourcesMedium
