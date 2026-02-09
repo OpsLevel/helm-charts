@@ -39,7 +39,7 @@ opslevel:
   forceSSL: false
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
-    tag: "selfhosted-prod-76c65efc-1762967475"
+    tag: "selfhosted-prod-df09c051-1770400830"
   account:
     name: "Main"
     username: "Alice Wonderland"
@@ -124,7 +124,7 @@ opssight:
   enabled: true
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opssight"
-    tag: "selfhosted-production-98cd866-1756924699"
+    tag: "selfhosted-production-c8726ff-1770403220"
   pod:
     annotations: {}
   web:
