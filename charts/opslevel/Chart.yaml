@@ -12,7 +12,7 @@ maintainers:
 dependencies:
   - name: "replicated"
     repository: "oci://registry.replicated.com/library"
-    version: "1.5.3"
+    version: "1.18.0"
   - name: "eck-operator"
     version: "2.16.1"
     repository: "https://helm.elastic.co/"
