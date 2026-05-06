@@ -92,6 +92,7 @@ runner:
   image:
     repository: "public.ecr.aws/opslevel/opslevel-runner"
     tag: "v2025.8.11"
+    digest: "sha256:048597926fffe2af850e607c509fc396fc73fa7bf46594c2f9b2fcbb452bfdab"
   job_image:
     repository: "public.ecr.aws/opslevel"
   replicas: 3
@@ -259,6 +260,7 @@ objectStorage:
     tag: "RELEASE.2022-08-22T23-53-06Z"
     repositoryCLI: "minio/mc"
     tagCLI: "RELEASE.2023-02-28T00-12-59Z"
+    digestCLI: "sha256:c631532a394eb0e2c54cfc6f28a98c4d261924f17886763ee45c786c32c9f4a1"
   resources: *resourcesMedium
   pod:
     annotations: {}

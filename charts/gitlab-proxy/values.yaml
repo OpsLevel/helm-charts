@@ -1,4 +1,4 @@
-image: "caddy:2.6"
+image: "caddy:2.6@sha256:60fb54d36b4b56b655fbcea432b0057ecc24f68d3a9ff800c695886be48e368d"
 real_token: ""
 dummy_token: ""
 gitlab_domain: "https://gitlab.com"
