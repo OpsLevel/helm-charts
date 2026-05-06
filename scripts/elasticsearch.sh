@@ -3,7 +3,7 @@
 # Set your private registry
 PRIVATE_REGISTRY="746108190720.dkr.ecr.us-east-1.amazonaws.com"
 IMAGE_NAME="elasticsearch"
-VERSION="8.17.3"
+VERSION="8.17.3@sha256:224c75e346bd745ce908f06a1cbad7bf10988961dcdcdfccb22556b3f856b3f0"
 SOURCE_IMAGE="docker.elastic.co/elasticsearch/elasticsearch:$VERSION"
 
 # Ensure Docker CLI experimental features are enabled
