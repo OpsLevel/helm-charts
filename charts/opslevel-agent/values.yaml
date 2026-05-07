@@ -78,6 +78,7 @@ agent:
   image:
     repository: "public.ecr.aws/opslevel/opslevel-agent"
     tag: "v2025.8.29"
+    digest: "sha256:0835f3fee44144a5b03e79e3ba996d9bf21f548daf03294c9b50ebc63fe8e911"
   integration: "kubernetes"
   labels: {}
   annotations: {}
