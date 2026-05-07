@@ -193,6 +193,7 @@ redis:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/redis"
     tag: "8.0.6"
+    digest: "sha256:9de560a2247d11275bd00cf32029949f451ed2c6a44cfb85c1b00d9a5886ac3d"
   resources: *resourcesMedium
   pod:
     annotations: {}

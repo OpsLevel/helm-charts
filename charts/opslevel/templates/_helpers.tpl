@@ -64,7 +64,7 @@ https://github.com/apps/{{ required "please provide 'integrations.github.secret.
 {{- end }}
 
 {{- define "redis.image" -}}
-{{ .Values.global.proxy }}{{if .Values.global.proxy }}/{{ end }}{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}
+{{ .Values.global.proxy }}{{if .Values.global.proxy }}/{{ end }}{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}@{{ .Values.redis.image.digest }}
 {{- end }}
 
 {{- define "postgres.image" -}}
