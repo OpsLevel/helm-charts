@@ -40,6 +40,7 @@ opslevel:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
     tag: "selfhosted-prod-df09c051-1770400830"
+    digest: "sha256:38f321a345bd780a94dc87647a13fd7fecae1cda29cfa5b8bc6a197ed39fff42"
   account:
     name: "Main"
     username: "Alice Wonderland"
@@ -126,6 +127,7 @@ opssight:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opssight"
     tag: "selfhosted-production-c8726ff-1770403220"
+    digest: "sha256:8a3f5530957257530785304155bb769d6ee22e8378d674e8f806b93a79f84764"
   pod:
     annotations: {}
   web:
@@ -145,6 +147,7 @@ mysql:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/mysql"
     tag: "8.0.34-debian"
+    digest: "sha256:be872f0d857262b512e094dd399ff7abd02cb93a73d0df1317decd1ea23b9391"
   resources: *resourcesMedium
   pod:
     annotations: {}
@@ -169,6 +172,7 @@ postgres:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/postgres"
     tag: "16.1-bookworm"
+    digest: "sha256:6984ec6ca4fa95a2728bd2036b6536f5092b327fcc18e052e321fd7e12308b23"
   resources: *resourcesMedium
   pod:
     annotations: {}
@@ -194,6 +198,7 @@ redis:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/redis"
     tag: "6.2.6"
+    digest: "sha256:226cbafc637cd58cf008bf87ec9d1548ad1b672ef4279433495bdff100cdb883"
   resources: *resourcesMedium
   pod:
     annotations: {}
@@ -233,6 +238,7 @@ elasticsearch:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/elasticsearch"
     tag: "8.17.3"
+    digest: "sha256:b5b1b63e263e5ebbbe9dc168ff3ce3024f28578f493e5571a3f008eae52940a9"
   resources: *resourcesLarge
   pod:
     annotations: {}
@@ -258,6 +264,7 @@ objectStorage:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/minio"
     tag: "RELEASE.2022-08-22T23-53-06Z"
+    digest: "sha256:255ead3d1a52c268e4a97428a827e9c50912ec2a03970432f9d6bcc5d69066df"
     repositoryCLI: "minio/mc"
     tagCLI: "RELEASE.2023-02-28T00-12-59Z"
     digestCLI: "sha256:c631532a394eb0e2c54cfc6f28a98c4d261924f17886763ee45c786c32c9f4a1"
@@ -283,6 +290,7 @@ faktory:
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/faktory"
     tag: "1.9.1"
+    digest: "sha256:0139f895e97aa961b4e7dce3050e768c352e4a67c14c64e67ade4ca0bb71790a"
   resources: *resourcesMedium
   securityContext: {}
   storageClass: ""
