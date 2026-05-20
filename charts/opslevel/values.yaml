@@ -39,8 +39,8 @@ opslevel:
   forceSSL: false
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
-    tag: "selfhosted-prod-df09c051-1770400830"
-    digest: "sha256:38f321a345bd780a94dc87647a13fd7fecae1cda29cfa5b8bc6a197ed39fff42"
+    tag: "selfhosted-prod-9ec6f139-1779291811"
+    digest: "sha256:b9dd99062deaef208c782965c599dd3f8e3d25245d9c38e3497683f1060c998a"
   account:
     name: "Main"
     username: "Alice Wonderland"
