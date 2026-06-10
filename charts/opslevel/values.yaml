@@ -49,7 +49,7 @@ opslevel:
   pod:
     annotations: {}
   web:
-    replicas: 3
+    replicas: 2
     resources: *resourcesMedium
     # limits webhook payload size accepted by Rails (bytes)
     maxWebhookPayloadSize: 0
@@ -96,7 +96,7 @@ runner:
     digest: "sha256:048597926fffe2af850e607c509fc396fc73fa7bf46594c2f9b2fcbb452bfdab"
   job_image:
     repository: "public.ecr.aws/opslevel"
-  replicas: 3
+  replicas: 2
   resources: *resourcesLarge
   serviceAccount:
     create: true
