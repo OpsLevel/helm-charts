@@ -217,7 +217,8 @@ redis:
     create: true
     name: redis
     annotations: {}
-  securityContext: {}
+  securityContext:
+    fsGroup: 999
   #    fsGroupChangePolicy: Always
   #    supplementalGroups: []
   #    sysctls: []
