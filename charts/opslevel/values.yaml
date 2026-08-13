@@ -39,8 +39,8 @@ opslevel:
   forceSSL: false
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
-    tag: "selfhosted-prod-9ec6f139-1779291811"
-    digest: "sha256:b9dd99062deaef208c782965c599dd3f8e3d25245d9c38e3497683f1060c998a"
+    tag: "selfhosted-prod-8de7ca42-1786633441"
+    digest: "sha256:cd44c821513c0d4f6b52c27352f558eba77e43e20697e9378617cba953f013be"
   account:
     name: "Main"
     username: "Alice Wonderland"
@@ -126,8 +126,8 @@ opssight:
   enabled: true
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opssight"
-    tag: "selfhosted-production-c8726ff-1770403220"
-    digest: "sha256:8a3f5530957257530785304155bb769d6ee22e8378d674e8f806b93a79f84764"
+    tag: "selfhosted-production-f9a8f4b-1786633467"
+    digest: "sha256:d1dab01a5d7e1b5fcbc4c3ad6d9d8cf5deaf5dbe56747d3c8f77fb7da7610c17"
   pod:
     annotations: {}
   web:
