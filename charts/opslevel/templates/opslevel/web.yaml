@@ -113,7 +113,12 @@ spec:
                   - sleep
                   - '30'
 
+          {{- with .Values.opslevel.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
+          {{- include "opslevel.writableVolumeMounts" . | nindent 12 }}
           {{- if .Values.opslevel.tls.enabled }}
             - name: ssl
               mountPath: /home/opslevel/config/ssl
@@ -132,6 +137,7 @@ spec:
           {{- end }}
 
       volumes:
+      {{- include "opslevel.writableVolumes" . | nindent 8 }}
       {{- if .Values.opslevel.tls.enabled }}
         - name: ssl
           secret:

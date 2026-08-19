@@ -1,0 +1,3 @@
+kind: Security
+body: 'Run the OpsLevel app workloads (web, workers, scheduler) with a read-only root filesystem, all capabilities dropped, and privilege escalation disabled. tmp/, log/, and /tmp are mounted as emptyDir volumes. OpenShift installs must set `opslevel.securityContext: {}` so the restricted SCC can assign fsGroup from the namespace range (DUNDER-227).'
+time: 2026-08-19T11:33:25.130607-04:00
