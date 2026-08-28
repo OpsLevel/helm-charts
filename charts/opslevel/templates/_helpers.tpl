@@ -94,3 +94,28 @@ https://github.com/apps/{{ required "please provide 'integrations.github.secret.
 {{- define "faktory.url" -}}
 tcp://admin:{{ .Values.faktory.secret.password }}@faktory:7419
 {{- end }}
+
+{{/*
+The app image ships its code tree root-owned and unwritable by the runtime user,
+so the only paths the app still needs to write are tmp/ (Rails' default file cache
+lives at tmp/cache), log/, and /tmp -- Tempfile backs ActiveStorage uploads and
+app/models/document.rb. Mounting all three as emptyDir is what makes
+readOnlyRootFilesystem: true viable for the app containers.
+*/}}
+{{- define "opslevel.writableVolumeMounts" -}}
+- name: app-tmp
+  mountPath: /home/opslevel/tmp
+- name: app-log
+  mountPath: /home/opslevel/log
+- name: system-tmp
+  mountPath: /tmp
+{{- end }}
+
+{{- define "opslevel.writableVolumes" -}}
+- name: app-tmp
+  emptyDir: {}
+- name: app-log
+  emptyDir: {}
+- name: system-tmp
+  emptyDir: {}
+{{- end }}

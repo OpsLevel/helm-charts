@@ -69,7 +69,22 @@ opslevel:
     tls: false
     annotations: {}
     ingressClassName: ""
-  securityContext: {}
+  # Pod-level. fsGroup is what makes the tmp/ and log/ emptyDir volumes writable by
+  # the app user -- emptyDir volumes are created root:root 0755 otherwise.
+  # OpenShift: set `opslevel.securityContext: {}`. The restricted SCC assigns fsGroup
+  # from the namespace's range and rejects a hardcoded value at admission.
+  securityContext:
+    fsGroup: 1000
+  # Container-level. The app image's code, vendored gems, and bootsnap cache are all
+  # root-owned and unwritable at runtime, and tmp/ + log/ are mounted as emptyDir,
+  # so the root filesystem can be read-only. This closes off post-compromise
+  # persistence: there is nowhere in the image an attacker can write code to.
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
   tls:
     enabled: false # If enabled ensure the ingress.tls is also enabled if using ingress
     secret:

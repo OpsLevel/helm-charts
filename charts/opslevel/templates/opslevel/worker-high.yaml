@@ -83,8 +83,13 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if .Values.certificate.enabled }}
+          {{- with .Values.opslevel.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
+          {{- include "opslevel.writableVolumeMounts" . | nindent 12 }}
+          {{- if .Values.certificate.enabled }}
             - name: certificate
               mountPath: /usr/local/share/ca-certificates/custom-cert.crt
               subPath: custom-cert.crt
@@ -92,8 +97,9 @@ spec:
             - name: ca
               mountPath: /etc/ssl/certs
           {{- end }}
-      {{- if .Values.certificate.enabled }}
       volumes:
+      {{- include "opslevel.writableVolumes" . | nindent 8 }}
+      {{- if .Values.certificate.enabled }}
         - name: ca
           emptyDir: {}
         - name: certificate
