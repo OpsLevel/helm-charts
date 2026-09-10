@@ -1,0 +1,5 @@
+kind: Feature
+body: Add `opslevel.ssrfAllowedIpRanges` so self-hosted operators can allow-list internal
+  IPs/CIDRs that custom integrations and webhooks need to reach, rendered into
+  `SSRF_ALLOWED_IP_RANGES`
+time: 2026-09-10T09:30:00.000000-04:00
