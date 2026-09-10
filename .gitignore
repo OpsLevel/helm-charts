@@ -3,3 +3,8 @@
 .idea
 /manifests
 rendered
+# Stray chart tarballs from a manual `helm pull` in the repo root. Anchored so the
+# vendored subcharts under charts/*/charts/ stay tracked and visible in git status.
+/*.tgz
+# `task pull-self-hosted` untars the published chart here
+/downloads
