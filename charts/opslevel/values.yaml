@@ -37,6 +37,13 @@ opslevel:
   domain: "example.com"
   subdomain: "self-hosted"
   forceSSL: false
+  # Internal destinations the app is allowed to reach when making outbound requests
+  # on a user-supplied URL -- custom action webhooks, custom integration extractors.
+  # Private, loopback, link-local and cloud-metadata addresses are blocked by default;
+  # list an IP ("10.1.2.3") or CIDR range ("10.0.0.0/8") here to carve one back out.
+  # Rendered into SSRF_ALLOWED_IP_RANGES, which web, workers and the scheduler all
+  # read at startup -- changing it restarts them.
+  ssrfAllowedIpRanges: []
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
     tag: "selfhosted-prod-8de7ca42-1786633441"

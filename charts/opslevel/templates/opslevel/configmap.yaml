@@ -51,6 +51,7 @@ data:
   SMTP_PORT: '{{ .Values.smtp.secret.port }}'
   SMTP_USERNAME: '{{ .Values.smtp.secret.username }}'
   SORBET_RUNTIME_DEFAULT_CHECKED_LEVEL: 'never'
+  SSRF_ALLOWED_IP_RANGES: '{{ join "," .Values.opslevel.ssrfAllowedIpRanges }}'
   THROTTLE_GRAPHQL_LIMIT: '250'
   THROTTLER_ENABLED: 'true'
   TRANSACTIONAL_OUTBOX_ENABLED: '{{ .Values.opssight.enabled }}'
