@@ -1,0 +1,5 @@
+kind: Feature
+body: Add `integrations.pagerduty.secret.appAuthorizationUrl`, `.appTokenUrl` and `.apiUrl`
+  so self-hosted instances can point the PagerDuty integration at a non-US service
+  region (e.g. EU). Leaving them blank keeps the existing US endpoints.
+time: 2026-09-11T10:15:00.000000-04:00

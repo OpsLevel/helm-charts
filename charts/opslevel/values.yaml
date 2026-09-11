@@ -390,6 +390,16 @@ integrations:
       name: "opslevel-pagerduty"
       usAppClientId: ""
       usAppClientSecret: ""
+      # Point at a non-US PagerDuty service region (e.g. EU). Leave blank to use the
+      # US endpoints -- the app falls back to its own defaults on an empty value. The
+      # client id/secret above must belong to an app registered in the same region.
+      # EU: https://app.pagerduty.com/global/oauth/authorize
+      appAuthorizationUrl: ""
+      # EU: https://app.pagerduty.com/global/oauth/token
+      appTokenUrl: ""
+      # EU: https://api.eu.pagerduty.com/ -- the trailing slash is required, the app
+      # uses this as an HTTP client url_prefix and appends relative paths to it.
+      apiUrl: ""
   slack: # Docs:
     enabled: false
     secret:
