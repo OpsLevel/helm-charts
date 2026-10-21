@@ -119,3 +119,20 @@ readOnlyRootFilesystem: true viable for the app containers.
 - name: system-tmp
   emptyDir: {}
 {{- end }}
+
+{{/*
+Rails' /up health check (Rails::HealthController). It is exempt from the force_ssl
+redirect, so it answers 200 rather than 301 over plain HTTP. HTTPS is only used when
+the pod itself terminates TLS (opslevel.tls.enabled).
+*/}}
+{{- define "opslevel.web.healthCheck" -}}
+httpGet:
+  {{- if .Values.opslevel.tls.enabled }}
+  scheme: "HTTPS"
+  {{- end }}
+  path: /up
+  port: http
+  httpHeaders:
+    - name: Host
+      value: '{{ .Values.opslevel.subdomain }}.{{ .Values.opslevel.domain }}'
+{{- end }}

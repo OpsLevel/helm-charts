@@ -86,26 +86,21 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          startupProbe: # Rails boot can be slow; allows up to ~2 min
+            {{- include "opslevel.web.healthCheck" . | nindent 12 }}
+            periodSeconds: 5
+            failureThreshold: 24
           readinessProbe:
-            httpGet:
-              {{- if .Values.opslevel.tls.enabled }}
-              scheme: "HTTPS"
-              {{- end }}
-              path: /api/health
-              port: http
-              httpHeaders:
-                - name: Host
-                  value: '{{ .Values.opslevel.subdomain }}.{{ .Values.opslevel.domain }}'
-
+            {{- include "opslevel.web.healthCheck" . | nindent 12 }}
+            timeoutSeconds: 3
             periodSeconds: 10
             successThreshold: 2
             failureThreshold: 3
-          livenessProbe:
-            tcpSocket:
-              port: http
+          livenessProbe: # deliberately lenient to avoid restart loops
+            {{- include "opslevel.web.healthCheck" . | nindent 12 }}
             periodSeconds: 20
-            successThreshold: 1
-            failureThreshold: 5
+            timeoutSeconds: 5
+            failureThreshold: 6
           lifecycle: # https://github.com/puma/puma/issues/2343
             preStop:
               exec:
