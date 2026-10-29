@@ -80,7 +80,7 @@ https://github.com/apps/{{ required "please provide 'integrations.github.secret.
 {{- end }}
 
 {{- define "objectStorageCLI.image" -}}
-{{ .Values.objectStorage.image.repositoryCLI }}:{{ .Values.objectStorage.image.tagCLI }}{{- if .Values.objectStorage.image.digestCLI }}@{{ .Values.objectStorage.image.digestCLI }}{{- end }}
+{{ .Values.global.proxy }}{{if .Values.global.proxy }}/{{ end }}{{ .Values.objectStorage.image.repositoryCLI }}:{{ .Values.objectStorage.image.tagCLI }}{{- if .Values.objectStorage.image.digestCLI }}@{{ .Values.objectStorage.image.digestCLI }}{{- end }}
 {{- end }}
 
 {{- define "runner.image" -}}

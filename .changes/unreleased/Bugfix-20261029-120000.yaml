@@ -1,0 +1,3 @@
+kind: Bugfix
+body: 'The MinIO bucket-creation pod now pulls its `mc` image through the Replicated proxy from the OpsLevel registry, because `minio/mc` is no longer available on Docker Hub. If you override `objectStorage.image.repositoryCLI`, it now gets the `global.proxy` prefix like every other image.'
+time: 2026-10-29T12:00:00.000000-04:00
