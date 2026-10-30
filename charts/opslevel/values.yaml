@@ -46,8 +46,8 @@ opslevel:
   ssrfAllowedIpRanges: []
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
-    tag: "selfhosted-prod-6a63382cead67f23bc32b497d8e0bcfd7ecf21be"
-    digest: "sha256:b3d282d25e177e29412dfa44e15efa6777bc870ac62a7cbc94e711925331ab2f"
+    tag: "selfhosted-prod-16af61bdef743fc1abe59b0780ccedfd23548c32"
+    digest: "sha256:b11004f07450bac55393628091c5b223bd1974fc05dbd47a3b8e1192636441f0"
   account:
     name: "Main"
     username: "Alice Wonderland"
@@ -148,8 +148,8 @@ opssight:
   enabled: true
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opssight"
-    tag: "selfhosted-production-f9a8f4b-1786633467"
-    digest: "sha256:d1dab01a5d7e1b5fcbc4c3ad6d9d8cf5deaf5dbe56747d3c8f77fb7da7610c17"
+    tag: "selfhosted-production-7bb367e-1793220936"
+    digest: "sha256:ea64bf9167a9e16b7d550033e687b464037aec338b9d1862ca38796c97b4092d"
   pod:
     annotations: {}
   web:
@@ -289,9 +289,9 @@ objectStorage:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/minio"
     tag: "RELEASE.2022-08-22T23-53-06Z"
     digest: "sha256:255ead3d1a52c268e4a97428a827e9c50912ec2a03970432f9d6bcc5d69066df"
-    repositoryCLI: "minio/mc"
-    tagCLI: "RELEASE.2023-02-28T00-12-59Z"
-    digestCLI: "sha256:c631532a394eb0e2c54cfc6f28a98c4d261924f17886763ee45c786c32c9f4a1"
+    repositoryCLI: "746108190720.dkr.ecr.us-east-1.amazonaws.com/minio"
+    tagCLI: "RELEASE.2023-12-09T18-17-51Z"
+    digestCLI: "sha256:7c37537c8e716ec27f73a033b604224a3184e3bff5d9a47ff335abb1d6055c38"
   resources: *resourcesMedium
   pod:
     annotations: {}
