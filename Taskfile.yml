@@ -33,9 +33,17 @@ tasks:
         vars: { REPLICATED_CHANNEL: 'Helm-Unstable' }
 
   public-release:
-    desc: Workflow that releases the self-hosted helm chart to customers
+    desc: Workflow that releases the self-hosted helm chart to customers (RELEASE_NOTES=path/to/notes.md to set notes)
     deps:
       - setup
+    preconditions:
+      - sh: '[ "$(git rev-parse --abbrev-ref HEAD)" = main ]'
+        msg: public-release only runs from main
+      # charts/opslevel/charts is skipped: helm package --dependency-update rewrites the subchart tgz.
+      - sh: '[ -z "$(git status --porcelain -- charts/opslevel '':!charts/opslevel/charts'')" ]'
+        msg: charts/opslevel has uncommitted changes
+      - sh: git fetch -q origin main && [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]
+        msg: local main isn't at origin/main; pull first
     cmds:
       - task: package-self-hosted
       - task: lint-self-hosted
@@ -60,6 +68,11 @@ tasks:
       - helm template ./charts/opslevel > all.yaml
       - kubectl slice --input-file=all.yaml --output-dir=./rendered
       - rm all.yaml
+
+  pin-digests:
+    desc: Pin private-ECR images in values.yaml to their tags' current digests (CHECK=true to only report)
+    cmds:
+      - scripts/pin-digests.sh {{ if .CHECK }}--check{{ end }}
 
   pull-self-hosted:
     desc: Pull the replicated helm chart down to disk to inspect it
@@ -92,7 +105,7 @@ tasks:
     deps:
       - install-replicated
     cmds:
-      - replicated release create --chart ./manifests/opslevel-{{ .VERSION_DYNAMIC }}.tgz --app opslevel --version "{{ .VERSION_DYNAMIC }}" --promote "{{ .REPLICATED_CHANNEL }}" -y
+      - replicated release create --chart ./manifests/opslevel-{{ .VERSION_DYNAMIC }}.tgz --app opslevel --version "{{ .VERSION_DYNAMIC }}" --promote "{{ .REPLICATED_CHANNEL }}" {{ if .RELEASE_NOTES }}--release-notes "$(cat {{ .RELEASE_NOTES }})" {{ end }}-y
 
   install-brew:
     internal: true
