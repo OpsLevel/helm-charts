@@ -1,0 +1,76 @@
+name: Public Release
+
+# Publishes charts/opslevel from main to Replicated's customer Helm channel, with release notes. Run on demand; the
+# version input has to match main's chart version, so it only ships the release it was started for.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Chart version to release, e.g. 2026.10.29. Must match charts/opslevel/Chart.yaml on main.
+        required: true
+      notes:
+        description: Release notes (markdown)
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+      -
+        name: Check the version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          chart=$(yq '.version' charts/opslevel/Chart.yaml)
+          [ "$chart" = "$VERSION" ] || { echo "::error::main's chart version is $chart, not $VERSION"; exit 1; }
+      -
+        name: Install Helm
+        uses: azure/setup-helm@2f5e7bc67f1f9972ab16657bb795f36d8f04de0e # v5.1.0
+        with:
+          # Not the newest Helm on purpose: registry.replicated.com serves a different replicated 1.18.0 subchart to
+          # newer clients (3.22 gets an empty replicatedAppEndpoint and no integration.enabled). Stay on 3.17.2,
+          # which gets the subchart laptop releases have shipped, until that difference is understood.
+          version: v3.17.2
+      -
+        name: Install Task
+        uses: arduino/setup-task@c0bc642852239c2689f73f4ea6459c29405f3c52 # v3.0.0
+        with:
+          version: 3.54.0
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Install Replicated CLI
+        env:
+          VERSION: 0.129.16
+          SHA256: 3af738be1ee5e41b9e014399459348c217b38f152cde15ebe0c35ba3c180fd46
+        run: |
+          curl -fsSLo replicated.tar.gz "https://github.com/replicatedhq/replicated/releases/download/v${VERSION}/replicated_${VERSION}_linux_amd64.tar.gz"
+          echo "${SHA256}  replicated.tar.gz" | sha256sum -c -
+          tar -xzf replicated.tar.gz replicated
+          sudo mv replicated /usr/local/bin/
+          rm replicated.tar.gz
+      -
+        name: Publish to Helm
+        env:
+          REPLICATED_API_TOKEN: ${{ secrets.REPLICATED_API_TOKEN }}
+          NOTES: ${{ inputs.notes }}
+        run: |
+          if [ -n "$NOTES" ]; then
+            printf '%s\n' "$NOTES" > "$RUNNER_TEMP/notes.md"
+            task public-release RELEASE_NOTES="$RUNNER_TEMP/notes.md"
+          else
+            task public-release
+          fi
