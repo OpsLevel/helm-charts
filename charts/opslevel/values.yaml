@@ -46,8 +46,8 @@ opslevel:
   ssrfAllowedIpRanges: []
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
-    tag: "selfhosted-prod-d3232bb459114287dd52c393d0adc4d542216bee"
-    digest: "sha256:3ebbf3b02d55ed13aaf93f16f9c58a726ec9cfd7a1b8b765626b90374ad10877"
+    tag: "selfhosted-prod-f08c523ff1e4ed4645305cc07b1a255774c6f1de"
+    digest: "sha256:5a34665c96372d650dda4162534007ddb96587537f43369edb2a607334070bbb"
   account:
     name: "Main"
     username: "Alice Wonderland"
