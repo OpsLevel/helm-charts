@@ -47,7 +47,7 @@ spec:
             - name: discovery.type
               value: single-node
             - name: ES_JAVA_OPTS
-              value: '-Xlog:disable -Xlog:all=warning:stderr:utctime,level,tags -Xlog:gc=debug:stderr:utctime'
+              value: '-XX:-UseBASE64Intrinsics -Xlog:disable -Xlog:all=warning:stderr:utctime,level,tags -Xlog:gc=debug:stderr:utctime'
           envFrom:
           - secretRef:
               name: '{{ .Values.elasticsearch.secret.name }}'
