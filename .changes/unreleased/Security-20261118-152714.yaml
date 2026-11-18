@@ -1,0 +1,3 @@
+kind: Security
+body: 'Disable the JVM Base64 intrinsic (`-XX:-UseBASE64Intrinsics`) on the bundled Elasticsearch to mitigate CVE-2026-114938 ("Java4Shell"). Upgrading restarts the Elasticsearch pod. If you run your own Elasticsearch (`elasticsearch.external: true` or ECK), add this flag to its `ES_JAVA_OPTS` yourself.'
+time: 2026-11-18T15:27:14.022606-05:00
