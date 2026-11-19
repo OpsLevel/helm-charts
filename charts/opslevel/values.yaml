@@ -46,8 +46,8 @@ opslevel:
   ssrfAllowedIpRanges: []
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opslevel"
-    tag: "selfhosted-prod-681baf1657522c16cf1efd5f6eee1a5fafab6624"
-    digest: "sha256:85ae84740bb6cddc13fbf897863a2df0af90abe216c8f043f0c644bd23611678"
+    tag: "selfhosted-prod-156adf762a310e8d69cdc08e81db3589ebbd7c4e"
+    digest: "sha256:f1a7704ba5450b8af35b3e5b70de70a582ba0a82910faefa1d5bcff3296dd148"
   account:
     name: "Main"
     username: "Alice Wonderland"
@@ -148,8 +148,8 @@ opssight:
   enabled: true
   image:
     repository: "746108190720.dkr.ecr.us-east-1.amazonaws.com/opssight"
-    tag: "selfhosted-production-7a9e894-1794930815"
-    digest: "sha256:833fa99955e54101dd398bd9a6b21001db0d694f255e2b7617ba6302e02e7b21"
+    tag: "selfhosted-production-2d0fdd1-1795095507"
+    digest: "sha256:1c5026279b538107338f61ad88aac57b3749354c2e9c25f7808784a86baed927"
   pod:
     annotations: {}
   web:
