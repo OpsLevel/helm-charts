@@ -1,5 +1,13 @@
+{{/*
+global.imagePullSecrets names pull secrets managed outside the chart and wins over
+dockerconfigjson, which makes the chart render its own opslevel-pull-secret.
+Same [{name: ...}] shape the Replicated subchart reads from this value.
+*/}}
 {{- define "opslevel.pullSecrets" -}}
-      {{- if (.Values.global.dockerconfigjson | default (.Values.global.replicated).dockerconfigjson | default false ) }}
+      {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+      {{- else if (.Values.global.dockerconfigjson | default (.Values.global.replicated).dockerconfigjson | default false ) }}
       imagePullSecrets:
         - name: opslevel-pull-secret
       {{- end }}
@@ -91,8 +99,59 @@ https://github.com/apps/{{ required "please provide 'integrations.github.secret.
 {{ .Values.global.proxy }}{{if .Values.global.proxy }}/{{ end }}{{ .Values.faktory.image.repository }}:{{ .Values.faktory.image.tag }}{{- if .Values.faktory.image.digest }}@{{ .Values.faktory.image.digest }}{{- end }}
 {{- end }}
 
-{{- define "faktory.url" -}}
-tcp://admin:{{ .Values.faktory.secret.password }}@faktory:7419
+{{/*
+Credentials the app containers read straight from the Secret that owns them, so an
+externally managed opslevel Secret never has to repeat them. env wins over envFrom.
+FAKTORY_URL is assembled by the kubelet from FAKTORY_PASSWORD, defined just above it.
+*/}}
+{{- define "faktory.env" -}}
+- name: FAKTORY_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: '{{ .Values.faktory.secret.name }}'
+      key: FAKTORY_PASSWORD
+- name: FAKTORY_URL
+  value: 'tcp://admin:$(FAKTORY_PASSWORD)@faktory:7419'
+{{- end }}
+
+{{- define "opslevel.credentials.env" -}}
+- name: DATABASE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: '{{ .Values.mysql.secret.name }}'
+      key: MYSQL_ROOT_PASSWORD
+- name: ELASTICSEARCH_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: '{{ .Values.elasticsearch.secret.name }}'
+      key: ELASTIC_PASSWORD
+{{ include "faktory.env" . }}
+{{- end }}
+
+{{- define "opssight.credentials.env" -}}
+- name: DB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: '{{ .Values.postgres.secret.name }}'
+      key: POSTGRES_PASSWORD
+- name: REDIS_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: '{{ .Values.redis.secret.name }}'
+      key: REDIS_PASSWORD
+      optional: true
+{{- end }}
+
+{{/*
+Roll the pods when a credential they read from another component's Secret changes
+in values. Renders empty for Secrets the chart does not create.
+*/}}
+{{- define "opslevel.credentials.checksum" -}}
+checksum/credentials: {{ print (include (print $.Template.BasePath "/mysql/secret.yaml") .) (include (print $.Template.BasePath "/elasticsearch/secret.yaml") .) (include (print $.Template.BasePath "/faktory/secret.yaml") .) | sha256sum }}
+{{- end }}
+
+{{- define "opssight.credentials.checksum" -}}
+checksum/credentials: {{ print (include (print $.Template.BasePath "/postgres/secret.yaml") .) (include (print $.Template.BasePath "/redis/secret.yaml") .) | sha256sum }}
 {{- end }}
 
 {{/*

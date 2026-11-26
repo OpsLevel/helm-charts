@@ -24,6 +24,7 @@ spec:
         app.kubernetes.io/part-of: runner
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/runner/secret.yaml") . | sha256sum }}
+        checksum/faktory: {{ include (print $.Template.BasePath "/faktory/secret.yaml") . | sha256sum }}
 {{- with .Values.runner.pod.annotations }}
 {{ toYaml . | indent 8 }}
 {{- end }}
@@ -82,6 +83,7 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
+          {{- include "faktory.env" . | nindent 10 }}
           envFrom: &envFrom
             - secretRef:
                 name: '{{ .Values.runner.secret.name }}'

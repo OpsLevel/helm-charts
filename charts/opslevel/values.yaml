@@ -2,6 +2,9 @@ global:
   nodeSelector: ""
   proxy: "proxy.replicated.com/proxy/opslevel"
   dockerconfigjson: "" # use this to override the docker pull secrets coming from replicated
+  # Image pull secrets you manage yourself. When set, every pod (the Replicated SDK
+  # included) uses these and the chart does not render opslevel-pull-secret.
+  imagePullSecrets: [] # e.g. [{name: "my-registry-credentials"}]
   resources:
     small: &resourcesSmall
       requests:
@@ -100,6 +103,11 @@ opslevel:
       # if create == true then following keys are used as the contents for the mounted files
       key: "" # The app expects a secret that gets mounted with the file tls.key
       crt: "" # The app expects a secret that gets mounted with the file tls.crt
+  # Set create: false to supply this Secret yourself. It holds only the app's own keys:
+  # ACTIVE_STORAGE_<TYPE>_ACCESS_KEY_ID, ACTIVE_STORAGE_<TYPE>_SECRET_ACCESS_KEY, DEV_PASSWORD,
+  # DEVISE_PEPPER, DEVISE_SECRET_KEY, ENCRYPTION_SALT, EXTERNAL_UUID_PEPPER, SECRET_KEY_BASE,
+  # SMTP_PASSWORD, THROTTLER_PEPPER. The MySQL, Elasticsearch and Faktory passwords are read
+  # from those components' own Secrets.
   secret:
     name: "opslevel"
     create: true
@@ -159,6 +167,8 @@ opssight:
     replicas: 1
     resources: *resourcesSmall
   securityContext: {}
+  # Set create: false to supply this Secret yourself; it needs only SECRET_KEY_BASE.
+  # The Postgres and Redis passwords are read from those components' own Secrets.
   secret:
     name: "opssight"
     create: true
@@ -180,6 +190,8 @@ mysql:
   securityContext: {}
   storageClass: ""
   storageSize: "10Gi"
+  # The app reads the database password from this Secret's MYSQL_ROOT_PASSWORD key,
+  # including when mysql.external is true.
   secret:
     create: true
     name: "opslevel-mysql"
@@ -274,6 +286,7 @@ elasticsearch:
     fsGroup: 0
   storageClass: ""
   storageSize: "8Gi"
+  # The app reads the Elasticsearch password from this Secret's ELASTIC_PASSWORD key.
   secret:
     create: true
     name: "opslevel-elasticsearch"
@@ -321,7 +334,11 @@ faktory:
   storageSize: "8Gi"
   pod:
     annotations: {}
+  # Set create: false to supply this Secret yourself. It needs FAKTORY_PASSWORD, plus
+  # FAKTORY_LICENSE if you have a Faktory Enterprise license. The app and runner build
+  # FAKTORY_URL from FAKTORY_PASSWORD.
   secret:
+    create: true
     name: "opslevel-faktory"
     password: "admin1234"
 
