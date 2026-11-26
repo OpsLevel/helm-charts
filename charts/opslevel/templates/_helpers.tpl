@@ -125,6 +125,7 @@ FAKTORY_URL is assembled by the kubelet from FAKTORY_PASSWORD, defined just abov
     secretKeyRef:
       name: '{{ .Values.elasticsearch.secret.name }}'
       key: ELASTIC_PASSWORD
+      optional: true
 {{ include "faktory.env" . }}
 {{- end }}
 
@@ -143,15 +144,30 @@ FAKTORY_URL is assembled by the kubelet from FAKTORY_PASSWORD, defined just abov
 {{- end }}
 
 {{/*
-Roll the pods when a credential they read from another component's Secret changes
-in values. Renders empty for Secrets the chart does not create.
+Roll the pods when a password they read from another component's Secret changes in
+values. Only those passwords are hashed, salted with a high-entropy value of the
+pod's own, so the annotation can't be used to guess a weak password offline.
+Secrets managed outside the chart don't roll the pods -- use e.g. Reloader for those.
 */}}
 {{- define "opslevel.credentials.checksum" -}}
-checksum/credentials: {{ print (include (print $.Template.BasePath "/mysql/secret.yaml") .) (include (print $.Template.BasePath "/elasticsearch/secret.yaml") .) (include (print $.Template.BasePath "/faktory/secret.yaml") .) | sha256sum }}
+checksum/credentials: {{ print .Values.opslevel.secret.secretKeyBase .Values.mysql.secret.password .Values.elasticsearch.secret.password .Values.faktory.secret.password | sha256sum }}
 {{- end }}
 
 {{- define "opssight.credentials.checksum" -}}
-checksum/credentials: {{ print (include (print $.Template.BasePath "/postgres/secret.yaml") .) (include (print $.Template.BasePath "/redis/secret.yaml") .) | sha256sum }}
+checksum/credentials: {{ print .Values.opssight.secret.secretKeyBase .Values.postgres.secret.password .Values.redis.secret.password | sha256sum }}
+{{- end }}
+
+{{- define "runner.credentials.checksum" -}}
+checksum/credentials: {{ print .Values.runner.secret.token .Values.faktory.secret.password | sha256sum }}
+{{- end }}
+
+{{/*
+tech-debt: kept in the chart-created Secrets for one release so pods from the previous
+release that restart mid-upgrade still find them. The env refs above take precedence,
+and Secrets you manage yourself don't need these keys. Remove in the release after next.
+*/}}
+{{- define "faktory.legacyUrl" -}}
+tcp://admin:{{ .Values.faktory.secret.password }}@faktory:7419
 {{- end }}
 
 {{/*

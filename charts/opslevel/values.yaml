@@ -2,8 +2,9 @@ global:
   nodeSelector: ""
   proxy: "proxy.replicated.com/proxy/opslevel"
   dockerconfigjson: "" # use this to override the docker pull secrets coming from replicated
-  # Image pull secrets you manage yourself. When set, every pod (the Replicated SDK
-  # included) uses these and the chart does not render opslevel-pull-secret.
+  # Image pull secrets you manage yourself. When set, the chart's pods use these and the
+  # chart does not render opslevel-pull-secret. The Replicated SDK pod also uses them
+  # unless replicated.imagePullSecrets is set.
   imagePullSecrets: [] # e.g. [{name: "my-registry-credentials"}]
   resources:
     small: &resourcesSmall
@@ -218,6 +219,8 @@ postgres:
     fsGroup: 1001
   storageClass: ""
   storageSize: "10Gi"
+  # OpsSight reads the database password from this Secret's POSTGRES_PASSWORD key,
+  # including when postgres.external is true.
   secret:
     create: true
     name: "opslevel-postgres"
@@ -286,7 +289,7 @@ elasticsearch:
     fsGroup: 0
   storageClass: ""
   storageSize: "8Gi"
-  # The app reads the Elasticsearch password from this Secret's ELASTIC_PASSWORD key.
+  # The app reads the Elasticsearch password from this Secret's ELASTIC_PASSWORD key, if present.
   secret:
     create: true
     name: "opslevel-elasticsearch"
@@ -336,7 +339,7 @@ faktory:
     annotations: {}
   # Set create: false to supply this Secret yourself. It needs FAKTORY_PASSWORD, plus
   # FAKTORY_LICENSE if you have a Faktory Enterprise license. The app and runner build
-  # FAKTORY_URL from FAKTORY_PASSWORD.
+  # FAKTORY_URL from FAKTORY_PASSWORD, which is not URL-encoded: avoid @ / : # ? % in it.
   secret:
     create: true
     name: "opslevel-faktory"

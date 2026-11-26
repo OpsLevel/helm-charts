@@ -21,6 +21,7 @@ spec:
         app.kubernetes.io/component: create-bucket
         app.kubernetes.io/part-of: minio
     spec:
+      {{- template "opslevel.pullSecrets" . }}
       containers:
       - name: minio-mc
         image: '{{ template "objectStorageCLI.image" . }}'
