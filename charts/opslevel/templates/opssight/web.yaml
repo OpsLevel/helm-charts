@@ -26,6 +26,7 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/opssight/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/opssight/secret.yaml") . | sha256sum }}
+        {{- include "opssight.credentials.checksum" . | nindent 8 }}
 {{- with .Values.opssight.pod.annotations }}
 {{ toYaml . | indent 8 }}
 {{- end }}
@@ -41,6 +42,8 @@ spec:
         - name: opssight-web
           image: "{{ template "opssight.image" . }}"
           imagePullPolicy: IfNotPresent
+          env:
+            {{- include "opssight.credentials.env" . | nindent 12 }}
           envFrom:
             - configMapRef:
                 name: '{{ .Values.opssight.secret.name }}'

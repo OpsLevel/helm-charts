@@ -25,6 +25,7 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/opslevel/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/opslevel/secret.yaml") . | sha256sum }}
+        {{- include "opslevel.credentials.checksum" . | nindent 8 }}
 {{- with .Values.opslevel.pod.annotations }}
 {{ toYaml . | indent 8 }}
 {{- end }}
@@ -71,11 +72,13 @@ spec:
             - --queue integration_data_sync_HIGH,1
             - --queue checks,1
             - --queue runners,1
+          env:
+            {{- include "opslevel.credentials.env" . | nindent 12 }}
           envFrom:
             - configMapRef:
                 name: 'opslevel'
             - secretRef:
-                name: 'opslevel'
+                name: '{{ .Values.opslevel.secret.name }}'
             - secretRef:
                 name: '{{ .Values.redis.secret.name }}'
             {{- template "opslevel.integration.secrets" . }}

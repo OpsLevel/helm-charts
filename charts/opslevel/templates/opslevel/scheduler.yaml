@@ -25,6 +25,7 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/opslevel/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/opslevel/secret.yaml") . | sha256sum }}
+        {{- include "opslevel.credentials.checksum" . | nindent 8 }}
 {{- with .Values.opslevel.pod.annotations }}
 {{ toYaml . | indent 8 }}
 {{- end }}
@@ -64,11 +65,12 @@ spec:
               value: "1"
             - name: SIDEKIQ_SCHEDULER
               value: "true"
+            {{- include "opslevel.credentials.env" . | nindent 12 }}
           envFrom: &envFrom
             - configMapRef:
                 name: 'opslevel'
             - secretRef:
-                name: 'opslevel'
+                name: '{{ .Values.opslevel.secret.name }}'
             - secretRef:
                 name: '{{ .Values.redis.secret.name }}'
             - secretRef:
